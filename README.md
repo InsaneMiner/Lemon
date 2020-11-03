@@ -8,7 +8,7 @@ This project is still in beta.<br>
 Feel welcome to make a pull request. This project is open source so do what ever you want with it. 
 <br>
 #### Info
-This project is a web server/web framework written in python. You can write a web app in python with it.
+This project is a web server/web framework written in python. You can write a web app with python in this new web framework.
 <br>
 ### How to use
 To run just run main.py file.
