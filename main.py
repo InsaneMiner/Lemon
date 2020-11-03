@@ -124,7 +124,7 @@ def handle_client(connection,address):
         keys = list(page_content[4].FILES.keys())
         for x in range(len(keys)):
             try:
-                os.remove("Temp/"+page_content[4].FILES[keys[x]]["temp"])
+                os.remove(config.config.TEMP+page_content[4].FILES[keys[x]]["temp"])
             except:
                 pass
     else:
