@@ -14,4 +14,5 @@ This project is a web server/web framework written in python. You can write a we
 ### Known Issues and Bugs
  - Binary files cannot be uploaded.
 
-
+## Images
+  ![screenshot](https://github.com/InsaneMiner/GreenBeetle/raw/main/screenshots/screenshot.png)
