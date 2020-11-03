@@ -33,7 +33,9 @@ return libs.RenderPage.Render(object,"file.file",{"variable":"hello"})
 <br>
 How to display custom text from python:<br>
 import libs.request<br>
-return libs.request.HttpOutput(object,"     <html><head></head><body><h1>Hello<h1></body></html>    ","text/html","None")
+return libs.request.HttpOutput(object,"     
+    <html><head></head><body><h1>Hello<h1></body></html>    
+","text/html","None")
 <br>
 How to change port number:<br>
 change the PORT variable in the config/config.py file.
