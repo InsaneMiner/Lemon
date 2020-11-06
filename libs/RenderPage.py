@@ -38,14 +38,14 @@ def render_static(object,file):
             return libs.request.HttpOutput(object,content,"text/plain",file_size)
     except PermissionError:
         object.status = "403"
-        return libs.request.HttpOutput(object,pages.errors.e403(),"text/html","None")
+        return pages.errors.e403(object)
     except (IsADirectoryError,FileNotFoundError):
         object.status = "404"
-        return libs.request.HttpOutput(object,pages.errors.e404(),"text/html","None")
+        return pages.errors.e404(object)
     except Exception as e:
         print(e)
         object.status = "500"
-        return libs.request.HttpOutput(object,pages.errors.e500(),"text/html","None")
+        return pages.errors.e500(object)
 
 
 
@@ -82,11 +82,44 @@ def Render(object,file,var={}):
             return libs.request.HttpOutput(object,content,"text/plain",file_size)
     except PermissionError:
         object.status = "403"
-        return libs.request.HttpOutput(object,pages.errors.e403(),"text/html","None")
+        return pages.errors.e403(object)
     except FileNotFoundError:
         object.status = "404"
-        return libs.request.HttpOutput(object,pages.errors.e404(),"text/html","None")
+        return pages.errors.e404(object)
     except Exception as e:
         print(e)
         object.status = "500"
-        return libs.request.HttpOutput(object,pages.errors.e500(),"text/html","None")
+        return pages.errors.e500(object)
+
+
+def RenderPath(object,file,var={}):
+    try:
+        with open(f"{file}","rb") as fo:
+            content = fo.read()
+        if ext(file) == config.config.FILE_EXTENSION_VAR:
+            content = libs.html_to_htpy.convert_to(content.decode(),var).encode("utf-8")
+            temper = True
+        else:
+            temper = False
+        if temper:
+            new_file_name = get_random_string()
+            with open(f"{config.config.TEMP}/{new_file_name}","wb") as file11:
+                file11.write(content)
+            file_size = os.path.getsize(f"{config.config.TEMP}/{new_file_name}")
+            threading.Thread(target=os.remove, args=(f"{config.config.TEMP}/{new_file_name}",)).start()
+        else:
+            file_size = os.path.getsize(f"{file}")
+        if ext(file) in libs.file_extensions.extensions:
+            return libs.request.HttpOutput(object,content,libs.file_extensions.extensions[ext(file)],file_size)
+        else:
+            return libs.request.HttpOutput(object,content,"text/plain",file_size)
+    except PermissionError:
+        object.status = "403"
+        return pages.errors.e403(object)
+    except FileNotFoundError:
+        object.status = "404"
+        return pages.errors.e404(object)
+    except Exception as e:
+        print(e)
+        object.status = "500"
+        return pages.errors.e500(object)

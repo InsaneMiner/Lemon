@@ -19,8 +19,7 @@ import libs.colors
 
 urls = {
     "/":"main",
-    "/hacker":"hacker",
-    "/hacker/":"hacker"
+    "/form":"form"
     } 
 
 
@@ -65,7 +64,7 @@ def page(object):
             data = getattr(pages.web_urls, urls[object.url])(object)
         except Exception as e:
             object.status = "500"
-            data = libs.request.HttpOutput(object,pages.errors.e500(),"text/html","None")   
+            data = pages.errors.e500(object)   
             print(e)
             
         return data
@@ -75,5 +74,5 @@ def page(object):
             return data
         except:
             object.status="404"
-            return libs.request.HttpOutput(object,pages.errors.e404(),"text/html","None")
+            return pages.errors.e404(object)
     
