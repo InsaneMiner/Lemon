@@ -103,30 +103,32 @@ def handle_client(connection,address):
             if len(buf1) < 1024:
                 break
         
+        if headers.decode("utf-8").replace(" ","") != "":
+            request_object = libs.handleHttp.http(headers,connection,address)
+            print("Request: "+ request_object.page,end = "")
+            print(" ",end="")
+            object = libs.HttpObject.HttpObject(request_object.page,request_object.GET,request_object.POST,request_object.cookies,request_object.request_type)
+            object.status ="200"
+            object.FILES = request_object.FILES
+            object.temp = request_object.temp
+            object.headers = request_object.headers
 
-        request_object = libs.handleHttp.http(headers,connection,address)
-        print("Request: "+ request_object.page,end = "")
-        print(" ",end="")
-        object = libs.HttpObject.HttpObject(request_object.page,request_object.GET,request_object.POST,request_object.cookies,request_object.request_type)
-        object.status ="200"
-        object.FILES = request_object.FILES
-        object.temp = request_object.temp
-        object.headers = request_object.headers
+            page_content = handle_request(object)
+            DATA = libs.create_http.create(page_content)
 
-        page_content = handle_request(object)
-        DATA = libs.create_http.create(page_content)
+            connection.send(DATA)
 
-        connection.send(DATA)
-
-        connection.close()
+            connection.close()
 
 
-        keys = list(page_content[4].FILES.keys())
-        for x in range(len(keys)):
-            try:
-                os.remove(config.config.TEMP+page_content[4].FILES[keys[x]]["temp"])
-            except:
-                pass
+            keys = list(page_content[4].FILES.keys())
+            for x in range(len(keys)):
+                try:
+                    os.remove(config.config.TEMP+page_content[4].FILES[keys[x]]["temp"])
+                except:
+                    pass
+        else:
+            connection.close()
     else:
         connection.close()
 
