@@ -10,7 +10,7 @@ Feel welcome to make a pull request. This project is open source so do what ever
 <br>
 Watch for more info: https://www.youtube.com/watch?v=PYr8js5QY1M
 <br>
-#### Info
+### Info
 This project is a web server/web framework written in python. You can write a web app with python in this new web framework.
 <br>
 ### How to use
