@@ -1,3 +1,4 @@
+#Do not change anything unless you know what your doing. It could brake the whole thing
 import config.config
 HOST = config.config.HOST
 PORT = config.config.PORT
