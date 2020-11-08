@@ -32,7 +32,7 @@ def init():
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
     sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) 
     sock.bind((HOST, PORT))  
-    sock.listen(5)
+    sock.listen(socket.SOMAXCONN)
 
 
 
@@ -174,9 +174,6 @@ def server_main():
 
 
 
-
-
-
-current_url()
+threading.Thread(target=current_url).start()
 init()
 server_main()
