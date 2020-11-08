@@ -14,7 +14,7 @@ import threading
 
 def ext(file):
     filename, file_extension = os.path.splitext(file)
-    return file_extension
+    return file_extension.lower()
 
 
 
