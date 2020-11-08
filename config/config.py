@@ -4,7 +4,7 @@ HOST = ""
 PORT = 8000
 
 ## Server name
-SERVER = "Insane Miner server"
+SERVER = "Lemon Server"
 
 
 ## folder config
