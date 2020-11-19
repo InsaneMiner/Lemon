@@ -16,10 +16,8 @@ import libs.colors
 
 
 
-
 urls = {
-    "/":"main",
-    "/form":"form"
+    "/":"main"
     } 
 
 

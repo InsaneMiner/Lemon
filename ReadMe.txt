@@ -31,8 +31,8 @@ then return:
 return libs.RenderPage.Render(object,"file.file",{"variable":"hello"})
 
 How to display custom text from python:
-import libs.request
-return libs.request.HttpOutput(object,"<html><head></head><body><h1>Hello<h1></body></html>","text/html","None")
+import libs.RenderPage
+return libs.RenderPage.HttpOutput(object,"<html><head></head><body><h1>Hello<h1></body></html>","text/html","None")
 
 How to change port number:
 change the PORT variable in the config/config.py file.
@@ -50,8 +50,8 @@ How to change the length of the token that can be generate:
 Change the token_length variable in the config/config.py file, to a valid integer.
 
 How to redirect to another page:
-import libs.redirect
-return libs.redirect.redirect(object,"/url")
+import libs.RenderPage
+return libs.RenderPage.redirect(object,"/url")
 
 WARNINGS:
 1. Please do not change the HOST variable in the config/config.py file unless you know what it does.

@@ -12,7 +12,7 @@ import libs.Date
 import socket
 import os
 import threading
-import libs.request
+import libs.RenderPage
 import sys
 import libs.create_http
 import pages.urls
@@ -67,7 +67,6 @@ def get_random_string(length=config.config.token_length):
         
 def handle_request(object):
     global sessions_
-
     if config.config.token in object.cookies:
         if object.cookies[config.config.token] in sessions_:
             id_ = object.cookies[config.config.token]
@@ -82,7 +81,6 @@ def handle_request(object):
     
     data =  pages.urls.page(object)
     sessions_[id_] = data[4].session
-
     return data
 
 

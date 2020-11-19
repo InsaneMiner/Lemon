@@ -2,7 +2,6 @@ import urllib.parse
 import libs.form_handle
 import codecs
 def current_cookies(Cookies):
-
     output = Cookies[8:]
     output = output.split(";")
     cookie = {}
@@ -14,7 +13,6 @@ def current_cookies(Cookies):
             cookie[ex[0]] = ex[1]
 
     cookie[(list(cookie)[-1])] = cookie[(list(cookie)[-1])][:-1]
-
     return cookie
 
 class RequestObject:
@@ -45,7 +43,7 @@ def http(headers,connection,address):
     _POST={}
     url = headers[0]
     if len(headers) > 8:
-        cookies = headers[7]
+        cookies  = "".join(s for s in headers if "Cookie:" in s)
         if "Cookie" in cookies:
             is_cookie = True
         else:

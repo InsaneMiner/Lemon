@@ -1,5 +1,4 @@
 import os
-import libs.request
 import pages.errors
 import libs.file_extensions
 import os.path
@@ -9,18 +8,12 @@ import libs.html_to_htpy
 import random
 import string
 import threading
-
+import libs.html_to_htpy
 
 
 def ext(file):
     filename, file_extension = os.path.splitext(file)
     return file_extension.lower()
-
-
-
-
-
-
 
 
 
@@ -33,9 +26,9 @@ def render_static(object,file):
             content = fo.read()
         file_size = os.path.getsize(f"{config.config.STATIC}/{file}")
         if ext(file) in libs.file_extensions.extensions:
-            return libs.request.HttpOutput(object,content,libs.file_extensions.extensions[ext(file)],file_size)
+            return HttpOutput(object,content,libs.file_extensions.extensions[ext(file)],file_size)
         else:
-            return libs.request.HttpOutput(object,content,"text/plain",file_size)
+            return HttpOutput(object,content,"text/plain",file_size)
     except PermissionError:
         object.status = "403"
         return pages.errors.e403(object)
@@ -77,9 +70,9 @@ def Render(object,file,var={}):
         else:
             file_size = os.path.getsize(f"{config.config.RENDER}/{file}")
         if ext(file) in libs.file_extensions.extensions:
-            return libs.request.HttpOutput(object,content,libs.file_extensions.extensions[ext(file)],file_size)
+            return HttpOutput(object,content,libs.file_extensions.extensions[ext(file)],file_size)
         else:
-            return libs.request.HttpOutput(object,content,"text/plain",file_size)
+            return HttpOutput(object,content,"text/plain",file_size)
     except PermissionError:
         object.status = "403"
         return pages.errors.e403(object)
@@ -110,9 +103,9 @@ def RenderPath(object,file,var={}):
         else:
             file_size = os.path.getsize(f"{file}")
         if ext(file) in libs.file_extensions.extensions:
-            return libs.request.HttpOutput(object,content,libs.file_extensions.extensions[ext(file)],file_size)
+            return HttpOutput(object,content,libs.file_extensions.extensions[ext(file)],file_size)
         else:
-            return libs.request.HttpOutput(object,content,"text/plain",file_size)
+            return HttpOutput(object,content,"text/plain",file_size)
     except PermissionError:
         object.status = "403"
         return pages.errors.e403(object)
@@ -123,3 +116,58 @@ def RenderPath(object,file,var={}):
         print(e)
         object.status = "500"
         return pages.errors.e500(object)
+
+
+
+
+
+
+
+
+
+def HttpOutput(object,output,_type,size):
+    Cookies = object.new_cookies
+    if size == "None":
+        size = len(output)
+    else:
+        pass
+    cookies1 = ""
+    for key in Cookies.keys():
+        cookies1 += "Set-Cookie: "+key+"="+Cookies[key]+";\n"
+    if cookies1 == "":
+        pass
+    else:
+        cookies1 = cookies1.rstrip("\n")
+    return [output,_type,cookies1,size,object]
+
+
+
+
+def HttpOutputVar(object,output,_type,size,var={}):
+    Cookies = object.new_cookies
+    if size == "None":
+        size = len(output)
+    else:
+        pass
+    cookies1 = ""
+    for key in Cookies.keys():
+        cookies1 += "Set-Cookie: "+key+"="+Cookies[key]+";\n"
+    if cookies1 == "":
+        pass
+    else:
+        cookies1 = cookies1.rstrip("\n")
+    output = libs.html_to_htpy.convert_to(output,var).encode("utf-8")
+    return [output,_type,cookies1,size,object]
+
+
+
+
+
+
+
+
+
+def redirect(object,url):
+    data = "<!DOCTYPE html>\n<html>\n<head><script>location.replace('"+url+"')</script></head>\n<body></body>\n</html>"
+    print("\nredirecting:",object.url,"-->",url)
+    return HttpOutput(object,data,"text/html","None")
