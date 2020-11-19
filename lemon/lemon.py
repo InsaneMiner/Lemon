@@ -20,6 +20,7 @@ import libs.HttpObject
 import string
 import random
 import libs.handleHttp
+
 sessions_  = {}
 
 
@@ -47,7 +48,7 @@ def current_url():
     if PORT == 80:
         print("Server address: http://localhost/")
     else:
-        print("Server address: http://localhost:"+str(PORT)+"/")
+        print(f"Server address: http://localhost:{str(PORT)}/")
 
 
 
@@ -104,7 +105,7 @@ def handle_client(connection,address):
         
         if headers.decode("utf-8").replace(" ","") != "":
             request_object = libs.handleHttp.http(headers,connection,address)
-            print("Request: "+ request_object.page,end = "")
+            print(f"Request: {request_object.page}",end = "")
             print(" ",end="")
             object = libs.HttpObject.HttpObject(request_object.page,request_object.GET,request_object.POST,request_object.cookies,request_object.request_type)
             object.status ="200"
@@ -130,15 +131,6 @@ def handle_client(connection,address):
             connection.close()
     else:
         connection.close()
-
-
-
-
-
-
-
-
-
 
 
 def server_main():
@@ -167,11 +159,11 @@ def server_main():
 
 
 
+def call_main():
 
 
 
 
-
-threading.Thread(target=current_url).start()
-init()
-server_main()
+    threading.Thread(target=current_url).start()
+    init()
+    server_main()

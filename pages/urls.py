@@ -1,4 +1,4 @@
-import pages.web_urls
+import pages.web
 import pages.errors
 import config.config
 import libs.RenderPage
@@ -59,7 +59,7 @@ urls = {
 def page(object):
     if object.url in urls:
         try:
-            data = getattr(pages.web_urls, urls[object.url])(object)
+            data = getattr(pages.web, urls[object.url])(object)
         except Exception as e:
             object.status = "500"
             data = pages.errors.e500(object)   
