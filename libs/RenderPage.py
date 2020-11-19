@@ -28,7 +28,7 @@ def render_static(object,file):
         if ext(file) in libs.file_extensions.extensions:
             return HttpOutput(object,content,libs.file_extensions.extensions[ext(file)],file_size)
         else:
-            return HttpOutput(object,content,"text/plain",file_size)
+            return HttpOutput(object,content,config.config.DEFAULT_MIME_TYPE,file_size)
     except PermissionError:
         object.status = "403"
         return pages.errors.e403(object)
@@ -72,7 +72,7 @@ def Render(object,file,var={}):
         if ext(file) in libs.file_extensions.extensions:
             return HttpOutput(object,content,libs.file_extensions.extensions[ext(file)],file_size)
         else:
-            return HttpOutput(object,content,"text/plain",file_size)
+            return HttpOutput(object,content,config.config.DEFAULT_MIME_TYPE,file_size)
     except PermissionError:
         object.status = "403"
         return pages.errors.e403(object)
@@ -105,7 +105,7 @@ def RenderPath(object,file,var={}):
         if ext(file) in libs.file_extensions.extensions:
             return HttpOutput(object,content,libs.file_extensions.extensions[ext(file)],file_size)
         else:
-            return HttpOutput(object,content,"text/plain",file_size)
+            return HttpOutput(object,content,config.config.DEFAULT_MIME_TYPE,file_size)
     except PermissionError:
         object.status = "403"
         return pages.errors.e403(object)

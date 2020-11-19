@@ -30,3 +30,4 @@ FILE_EXTENSION_VAR = ".html"
 
 errorHtmlFile = "lemon/error.html"
 
+DEFAULT_MIME_TYPE = "text/plain"
