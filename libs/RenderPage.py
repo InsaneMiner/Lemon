@@ -168,6 +168,6 @@ def HttpOutputVar(object,output,_type,size,var={}):
 
 
 def redirect(object,url):
-    data = "<!DOCTYPE html>\n<html>\n<head><script>location.replace('"+url+"')</script></head>\n<body></body>\n</html>"
+    data = f"<!DOCTYPE html><html><head><meta http-equiv=\"Refresh\" content=\"0; url='{url}'\" /></head><body></body></html>"
     print("\nredirecting:",object.url,"-->",url)
     return HttpOutput(object,data,"text/html","None")

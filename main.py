@@ -29,10 +29,13 @@ def init():
     global sock
     global HOST
     global PORT
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
-    sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) 
-    sock.bind((HOST, PORT))  
-    sock.listen(socket.SOMAXCONN)
+    try:
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
+        sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) 
+        sock.bind((HOST, PORT))  
+        sock.listen(socket.SOMAXCONN)
+    except:
+        sys.exit("Failed to start server")
 
 
 
