@@ -1,5 +1,4 @@
 # Lemon
-### when life gives you lemons, make lemonade
 
 
 
