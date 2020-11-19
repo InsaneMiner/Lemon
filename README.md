@@ -1,3 +1,4 @@
+![screenshot](https://github.com/InsaneMiner/GreenBeetle/raw/main/screenshots/screenshot.png)
 # Lemon
 
 
