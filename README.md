@@ -26,4 +26,4 @@ To run just run main.py file.
  - lemon requires no installation
  - lemon is easy to customize
  - lemon is easy to use
- - very simple
+ - very simple to start
