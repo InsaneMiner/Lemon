@@ -91,7 +91,7 @@ def http(headers,connection,address):
         Temp = {}
         FILES = {}
 
-    url = url.replace("HTTP/1.1","")
+    url = url.replace("HTTP/1.1","").replace("HTTP/1.0").replace("HTTP/2.0")
     url = url.replace(" ","")
     if "?" in url:
         url_parts = url.split("?")

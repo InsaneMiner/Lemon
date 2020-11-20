@@ -1,4 +1,4 @@
-![screenshot](https://github.com/InsaneMiner/Lemon/blob/main/images/Lemon.png)
+![screenshot](https://github.com/InsaneMiner/Lemon/blob/main/images/Lemon(1).png)
 # Lemon
 
 
