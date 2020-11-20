@@ -17,11 +17,7 @@ def multipart_form_data(http):
     for line in http.splitlines():
         if foundFiles:
             data += line+"\n"
-        if line.startswith("Host:"):
-            pass
-        elif line.startswith("User-Agent:"):
-            pass
-        elif line.startswith("Content-Type: "):
+        if line.startswith("Content-Type: "):
             if foundFiles:
                 pass
             else:
