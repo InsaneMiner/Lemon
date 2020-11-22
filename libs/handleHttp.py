@@ -76,7 +76,7 @@ def http(headers,connection,address):
         current_headers = get_headers(headers1)
         if "Content-Type" in current_headers:
             if "multipart/form-data;" in current_headers["Content-Type"]:
-                headers_ , Temp , FILES , _POST1= libs.form_handle.multipart_form_data(headers1.decode("utf-8","ignore"))
+                headers_ , Temp , FILES , _POST1= libs.form_handle.multipart_form_data(headers1.decode("utf-8","ignore"),headers1)
                 _POST.update(_POST1)
             else:
                 headers_ = {}
@@ -91,7 +91,7 @@ def http(headers,connection,address):
         Temp = {}
         FILES = {}
 
-    url = url.replace("HTTP/1.1","").replace("HTTP/1.0").replace("HTTP/2.0")
+    url = url.replace("HTTP/1.1","",1).replace("HTTP/1.0","",1).replace("HTTP/2.0","",1)
     url = url.replace(" ","")
     if "?" in url:
         url_parts = url.split("?")

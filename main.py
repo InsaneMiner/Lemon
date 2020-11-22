@@ -98,14 +98,19 @@ def handle_client(connection,address):
     else:
         run = True
     if run:
+
+
         headers=b""
+        buffer_size = 4096
         while True:
-            buf1 = connection.recv(1024)
+            buf1 = connection.recv(buffer_size)
             headers += buf1
-            if len(buf1) < 1024:
+            if len(buf1) < buffer_size:
                 break
-        
-        if headers.decode("utf-8").replace(" ","") != "":
+            
+            
+
+        if headers.decode("utf-8","ignore").replace(" ","") != "":
             request_object = libs.handleHttp.http(headers,connection,address)
             print("Request: "+ request_object.page,end = "")
             print(" ",end="")
@@ -114,19 +119,15 @@ def handle_client(connection,address):
             object.FILES = request_object.FILES
             object.temp = request_object.temp
             object.headers = request_object.headers
-
+            
             page_content = handle_request(object)
             DATA = libs.create_http.create(page_content)
-
             connection.send(DATA)
-
             connection.close()
-
-
             keys = list(page_content[4].FILES.keys())
             for x in range(len(keys)):
                 try:
-                    os.remove(config.config.TEMP+page_content[4].FILES[keys[x]]["temp"])
+                    os.remove(f"{config.config.TEMP}/{page_content[4].FILES[keys[x]]['temp']}")
                 except:
                     pass
         else:
