@@ -18,7 +18,7 @@ To run just run main.py file.
 <br>
 
 ## Images
-  ![screenshot](https://github.com/InsaneMiner/GreenBeetle/raw/main/screenshots/screenshot.png)
+  ![screenshot](https://raw.githubusercontent.com/InsaneMiner/Lemon/main/images/screenshots/screenshot.png)
 ## Why use lemon
  - lemon requires no installation
  - lemon is easy to customize
