@@ -38,7 +38,7 @@ def multipart_formdata(data,temp_folder):
 
         temp_file  = random_temp()
 
-        with open(temp_folder+"/"+temp_file,"wb") as file:
+        with open(f"{temp_folder}/{temp_file}","wb") as file:
             file.write(part.get_payload(decode=True))
         
 

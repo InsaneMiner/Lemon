@@ -50,7 +50,7 @@ def current_url():
     if PORT == 80:
         print("Server address: http://localhost/")
     else:
-        print("Server address: http://localhost:"+str(PORT)+"/")
+        print(f"Server address: http://localhost:{str(PORT)}/")
 
 
 

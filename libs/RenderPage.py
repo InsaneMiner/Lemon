@@ -133,7 +133,7 @@ def HttpOutput(object,output,_type,size):
         pass
     cookies1 = ""
     for key in Cookies.keys():
-        cookies1 += "Set-Cookie: "+key+"="+Cookies[key]+";\n"
+        cookies1 += f"Set-Cookie: {key}={Cookies[key]};\n"
     if cookies1 == "":
         pass
     else:
@@ -151,7 +151,7 @@ def HttpOutputVar(object,output,_type,size,var={}):
         pass
     cookies1 = ""
     for key in Cookies.keys():
-        cookies1 += "Set-Cookie: "+key+"="+Cookies[key]+";\n"
+        cookies1 += f"Set-Cookie: {key}={Cookies[key]};\n"
     if cookies1 == "":
         pass
     else:

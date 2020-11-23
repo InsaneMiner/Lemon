@@ -20,7 +20,7 @@ def create(page_content):
     threading.Thread(target=status_print,args=(page_content,)).start()
     cookie_string = ""
     if len(page_content[2]) > 0:
-        cookie_string = "\n"+str(page_content[2])
+        cookie_string = f"\n{str(page_content[2])}"
     else:
         pass
     page_content_1 = ""
