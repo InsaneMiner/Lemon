@@ -171,3 +171,10 @@ def redirect(object,url):
     data = f"<!DOCTYPE html><html><head><meta http-equiv=\"Refresh\" content=\"0; url='{url}'\" /></head><body></body></html>"
     print("\nredirecting:",object.url,"-->",url)
     return HttpOutput(object,data,"text/html","None")
+
+
+
+
+def ResetSession(object):
+    object.session = {}
+    object.sessionReset = True

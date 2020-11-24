@@ -1,4 +1,4 @@
-import libs.RenderPage
+import libs.lemon
 
 def main(object):
-    return libs.RenderPage.Render(object,"default.html")
+    return libs.lemon.Render(object,"default.html")

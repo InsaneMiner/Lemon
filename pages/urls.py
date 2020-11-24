@@ -1,7 +1,7 @@
 import pages.web
 import pages.errors
 import config.config
-import libs.RenderPage
+import libs.lemon
 import libs.colors
 
 
@@ -68,7 +68,7 @@ def page(object):
         return data
     else:
         try:
-            data = libs.RenderPage.render_static(object,object.url[1:])
+            data = libs.lemon.render_static(object,object.url[1:])
             return data
         except:
             object.status="404"

@@ -11,3 +11,4 @@ class HttpObject:
         object.session = {}
         object.temp = {}
         object.FILES = {}
+        object.sessionReset = False
