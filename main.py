@@ -3,11 +3,6 @@ import config.config
 HOST = config.config.HOST
 PORT = config.config.PORT
 SERVER = config.config.SERVER
-
-
-
-
-
 import libs.Date
 import socket
 import os
@@ -23,8 +18,6 @@ import libs.handleHttp
 sessions_  = {}
 
 
-
-
 def init():
     global sock
     global HOST
@@ -36,14 +29,6 @@ def init():
         sock.listen(socket.SOMAXCONN)
     except:
         sys.exit("Failed to start server")
-
-
-
-
-
-
-
-
     
 def current_url():
     global PORT
@@ -51,16 +36,6 @@ def current_url():
         print("Server address: http://localhost/")
     else:
         print(f"Server address: http://localhost:{str(PORT)}/")
-
-
-
-
-
-
-
-
-
-
 
 def get_random_string(length=config.config.token_length):
     letters = string.ascii_lowercase
@@ -92,10 +67,6 @@ def handle_request(object):
     data =  pages.urls.page(object)
     threading.Thread(target=reset_session,args=(data,id_)).start()
     return data
-
-
-
-
 
 def handle_client(connection,address):
     if address[0] in config.config.blacklist:
@@ -139,17 +110,6 @@ def handle_client(connection,address):
             connection.close()
     else:
         connection.close()
-
-
-
-
-
-
-
-
-
-
-
 def server_main():
     global sock
     while True:  
@@ -158,29 +118,6 @@ def server_main():
             threading.Thread(target=handle_client, args=(connection,address)).start()
         except KeyboardInterrupt:
             sys.exit("\b\bShutting Down")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 threading.Thread(target=current_url).start()
 init()
 server_main()
