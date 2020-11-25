@@ -35,6 +35,10 @@ def render_static(object,file):
     except (IsADirectoryError,FileNotFoundError):
         object.status = "404"
         return pages.errors.e404(object)
+    except OSError as exc:
+        if exc.errno == 36:
+            object.status = "404"
+            return pages.errors.e404(object)
     except Exception as e:
         print(e)
         object.status = "500"
