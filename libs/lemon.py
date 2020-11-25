@@ -8,7 +8,6 @@ import libs.html_to_htpy
 import random
 import string
 import threading
-import libs.html_to_htpy
 
 
 def ext(file):
