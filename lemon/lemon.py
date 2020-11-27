@@ -1,4 +1,5 @@
 #cython: language_level=3
+
 #Do not change anything unless you know what your doing. It could brake the whole thing
 import config.config
 HOST = config.config.HOST
@@ -16,6 +17,7 @@ import libs.HttpObject
 import string
 import random
 import libs.handleHttp
+import libs.colors
 sessions_  = {}
 
 
@@ -28,8 +30,12 @@ def init():
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) 
         sock.bind((HOST, PORT))  
         sock.listen(socket.SOMAXCONN)
-    except:
-        sys.exit("Failed to start server")
+    except OSError as exc:
+        if exc.errno == 98:
+            sys.exit(libs.colors.colors.fg.lightred+"Error: Another application is using this address/port"+libs.colors.colors.reset)
+        sys.exit(libs.colors.colors.fg.lightred+"Error: Failed to start server for unknow reason. \nError code: "+str(exc)+libs.colors.colors.reset)
+    except Exception as e:
+        sys.exit(libs.colors.colors.fg.lightred+"Error: Failed to start server for unknow reason. \nError code: "+str(e)+libs.colors.colors.reset)
     
 def current_url():
     global PORT
