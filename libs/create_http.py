@@ -1,3 +1,4 @@
+#cython: language_level=3
 import libs.Date
 import config.config
 import libs.colors

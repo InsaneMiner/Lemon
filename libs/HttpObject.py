@@ -1,4 +1,4 @@
-
+#cython: language_level=3
 class HttpObject:
     def __init__(object,url,_GET,_POST,cookies,method):
         object.GET = _GET

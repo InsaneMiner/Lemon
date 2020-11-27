@@ -1,3 +1,4 @@
+#cython: language_level=3
 import re
 def convert_to(text,variables = {}):
     data = re.findall('\{{([^}]+)\}}',  text)

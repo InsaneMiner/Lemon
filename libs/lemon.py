@@ -1,3 +1,4 @@
+#cython: language_level=3
 import os
 import pages.errors
 import libs.file_extensions

@@ -1,3 +1,4 @@
+#cython: language_level=3
 class colors:
     reset='\033[0m'
     bold='\033[01m'

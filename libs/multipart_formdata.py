@@ -1,3 +1,4 @@
+#cython: language_level=3
 import email.parser
 import string
 import random

@@ -1,3 +1,4 @@
+#cython: language_level=3
 extensions = {
     ".html":"text/html",
     ".htm":"text/html",

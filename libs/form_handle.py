@@ -1,3 +1,4 @@
+#cython: language_level=3
 import config.config
 import random
 import string

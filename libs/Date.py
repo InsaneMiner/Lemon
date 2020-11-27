@@ -1,3 +1,5 @@
+
+#cython: language_level=3
 from datetime import datetime
 def httpdate():
     dt = datetime.now()
