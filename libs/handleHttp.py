@@ -121,6 +121,7 @@ def http(headers,connection,address):
         pass
     else:
         cookies = current_cookies(cookies)
+    page = page.replace("../","").replace("./","")
     object = RequestObject()
     object.POST = _POST
     object.GET = _GET
