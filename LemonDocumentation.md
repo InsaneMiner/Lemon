@@ -21,6 +21,7 @@ You will need to know basic HTML and CSS, for the front end. The backend is all 
  - File upload 
  - Using sessions
  - Displaying html with variables
+ - Url Variables - unfixed urls
 
 ### Setting up Lemon
 download the source code with.
@@ -213,3 +214,18 @@ just use this instead
 return libs.lemon.HttpObjectVar(object,"<h1>Hello, {{name}}</h1>", "text/html", "None",{"name":"username"})
 ```
 That is all thats needed.
+
+### Url variables - unfixed urls
+Url variables are data passed in through the url for example
+```
+/pages/dogs/beagles
+```
+and your url that you would set would look like
+```
+/pages/dogs/<dog_bread>
+```
+so to access the variables use
+```python
+object.url_data["dog_bread"]
+```
+so you could use this for passing info and it looks better than ?dog_bread=beagles

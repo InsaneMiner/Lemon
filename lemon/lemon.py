@@ -18,6 +18,7 @@ import string
 import random
 import libs.handleHttp
 import libs.colors
+import time
 sessions_  = {}
 
 
@@ -76,6 +77,7 @@ def handle_request(object):
     return data
 
 def handle_client(connection,address):
+    start_time = time.time()
     if address[0] in config.config.blacklist:
         run = False
     else:
@@ -117,6 +119,13 @@ def handle_client(connection,address):
             connection.close()
     else:
         connection.close()
+    time_took = time.time() - start_time
+    if time_took > 3.0:
+        time_message = f"{libs.colors.colors.fg.red}{time_took}{libs.colors.colors.reset}"
+    else:
+        time_message = f"{libs.colors.colors.fg.green}{time_took}{libs.colors.colors.reset}"
+    time_message_print = f"It took {time_message} seconds to proccess and return request\n"
+    sys.stdout.write(time_message_print)
 def server_main():
     global sock
     while True:  

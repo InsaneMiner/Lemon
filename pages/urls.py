@@ -4,7 +4,7 @@ import pages.errors
 import config.config
 import libs.lemon
 import libs.colors
-
+import libs.url_validation
 
 
 
@@ -18,7 +18,8 @@ import libs.colors
 
 
 urls = {
-    "/":"main"
+    "/":"main",
+    "/root/<page>":"main"
     } 
 
 
@@ -58,14 +59,15 @@ urls = {
 
 
 def page(object):
-    if object.url in urls:
+    correct_url = libs.url_validation.validate_url(object.url,urls)
+    if correct_url[0] != None:
         try:
-            data = getattr(pages.web, urls[object.url])(object)
+            object.url_data = correct_url[1]
+            data = getattr(pages.web, urls[correct_url[0]])(object)
         except Exception as e:
             object.status = "500"
             data = pages.errors.e500(object)   
             print(e)
-            
         return data
     else:
         try:
