@@ -5,7 +5,7 @@
 
 
 
-This project is still in beta.<br>
+This project is still in beta. Almost out of beta<br>
 Feel welcome to make a pull request. This project is open source so do what ever you want with it. 
 <br>
 Watch for more info: https://www.youtube.com/watch?v=PYr8js5QY1M
@@ -16,7 +16,8 @@ This project is a web server/web framework written in python. You can write a we
 ### How to use
 To run just run main.py file.
 <br>
-
+### Where looking for people
+Where looking for someone who could help rewrite the documentation
 ## Images
   ![screenshot](https://raw.githubusercontent.com/InsaneMiner/Lemon/main/images/screenshots/screenshot.png)
 ## Why use lemon
