@@ -2,6 +2,8 @@
 import urllib.parse
 import libs.form_handle
 import codecs
+def split_header(h):
+    return h.split(": ",1)
 def current_cookies(Cookies):
     output = Cookies[8:]
     output = output.split(";")
@@ -12,10 +14,8 @@ def current_cookies(Cookies):
             cookie[ex[0][1:]] = ex[1]
         else:
             cookie[ex[0]] = ex[1]
-
     cookie[(list(cookie)[-1])] = cookie[(list(cookie)[-1])][:-1]
     return cookie
-
 class RequestObject:
     def __init__(self):
         page=""
@@ -51,22 +51,14 @@ def http(headers,connection,address):
             is_cookie = False
     else:
         is_cookie =False
-
-
-
     first_data_get_or_post = url[0:3]
     first_data_get_or_post_1 = url[0:4]
-
-
     if first_data_get_or_post == "GET":
         request_type = "GET"
     elif first_data_get_or_post_1 == "POST":
         request_type = "POST"
     else:
         request_type = "GET"
-
-
-
     if request_type == "GET":
         url = url.replace(url[:3], '')
         headers_ = {}
@@ -91,7 +83,6 @@ def http(headers,connection,address):
         headers_ = {}
         Temp = {}
         FILES = {}
-
     url = url.replace("HTTP/1.1","",1).replace("HTTP/1.0","",1).replace("HTTP/2.0","",1)
     url = url.replace(" ","")
     if "?" in url:
@@ -102,13 +93,11 @@ def http(headers,connection,address):
         page = url
     _GET = dict(urllib.parse.parse_qsl(urllib.parse.urlsplit(url).query))
     _POST1 = headers[len(headers)-1].split("&")
-
     for x in range(len(_POST1)):
         try:
             _POST[_POST1[x].split("=")[0]] = _POST1[x].split("=")[1]
         except:
             pass
-
     if _GET == {}:
         pass
     else:
@@ -122,6 +111,13 @@ def http(headers,connection,address):
     else:
         cookies = current_cookies(cookies)
     page = page.replace("../","").replace("./","")
+    new_headers = list(map(split_header, headers))
+    headers = {}
+    for h in new_headers:
+        if len(h) > 1:
+            headers[h[0]] = h[1]
+        else:
+            pass
     object = RequestObject()
     object.POST = _POST
     object.GET = _GET
