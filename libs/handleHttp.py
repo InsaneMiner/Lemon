@@ -39,7 +39,7 @@ def get_headers(request):
             headers_dict[line.split(":",1)[0]] = line.split(":",1)[1][1:]
         x_ += 1
     return headers_dict
-def http(headers,connection,address):
+def http(headers):
     headers1 = headers
     headers = headers.decode("utf-8","ignore").split("\n")
     _POST={}

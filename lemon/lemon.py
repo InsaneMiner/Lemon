@@ -20,25 +20,11 @@ import libs.handleHttp
 import libs.colors
 import time
 import re
+import asyncio
 sessions_  = {}
 
 
-def init():
-    global sock
-    global HOST
-    global PORT
-    try:
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
-        sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) 
-        sock.bind((HOST, PORT))  
-        sock.listen(socket.SOMAXCONN)
-    except OSError as exc:
-        if exc.errno == 98:
-            sys.exit(libs.colors.colors.fg.lightred+"Error: Another application is using this address/port"+libs.colors.colors.reset)
-        sys.exit(libs.colors.colors.fg.lightred+"Error: Failed to start server for unknow reason. \nError code: "+str(exc)+libs.colors.colors.reset)
-    except Exception as e:
-        sys.exit(libs.colors.colors.fg.lightred+"Error: Failed to start server for unknow reason. \nError code: "+str(e)+libs.colors.colors.reset)
-    
+
 def current_url():
     global PORT
     if PORT == 80:
@@ -77,9 +63,15 @@ def handle_request(object):
     threading.Thread(target=reset_session,args=(data,id_)).start()
     return data
 
-def handle_client(connection,address):
+def log_info(object,time_took,address,request_full_url,dateandtime):
+    with open(config.config.LOG_LOCATION,"a+") as log_file:
+        log_file.write(f"TIMETOOK[{time_took}] DATE&TIME[\"{dateandtime}\"] IP[{address[0]}] URL[\"{object.url}\"] REQUEST[\"{request_full_url}\"] STATUS[{object.status}]\n")
+
+async def handle_client(reader,writer):
+    dateandtime = libs.Date.httpdate()
+    address = writer.get_extra_info('peername')
     start_time = time.time()
-    if address[0] in config.config.blacklist:
+    if address in config.config.blacklist:
         run = False
     else:
         run = True
@@ -90,7 +82,7 @@ def handle_client(connection,address):
         _ = 0
         bad_request = 0
         while True:
-            buf1 = connection.recv(buffer_size)
+            buf1 = await reader.read(buffer_size)
             http_request["data"] = http_request["data"] + buf1
 
             if "\r\n\r\n" in http_request["data"].decode("utf-8",errors="ignore") and current_http_status != 1:
@@ -121,14 +113,16 @@ def handle_client(connection,address):
             _ += 1 
         if bad_request == 1:
             try:
-                connection.sendall(libs.create_http.create_error("Bad Request","400"))
-                connection.close()
+                writer.write(libs.create_http.create_error("Bad Request","400"))
+                await writer.drain()
+                writer.close()
             except Exception as e:
                 print(e)
         else:
             headers = http_request["data"]
             if headers.decode("utf-8",errors="ignore").replace(" ","") != "":
-                request_object = libs.handleHttp.http(headers,connection,address)
+                request_full_url = headers.decode("utf-8",errors="ignore").split("\r\n")[0]
+                request_object = libs.handleHttp.http(headers)
                 print("Request: "+ request_object.page,end = "")
                 print(" ",end="")
                 object = libs.HttpObject.HttpObject(request_object.page,request_object.GET,request_object.POST,request_object.cookies,request_object.request_type)
@@ -136,11 +130,11 @@ def handle_client(connection,address):
                 object.FILES = request_object.FILES
                 object.temp = request_object.temp
                 object.headers = request_object.headers
-                
                 page_content = handle_request(object)
                 DATA = libs.create_http.create(page_content)
-                connection.send(DATA)
-                connection.close()
+                writer.write(DATA)
+                await writer.drain()
+                writer.close()
                 keys = list(page_content[4].FILES.keys())
                 for x in range(len(keys)):
                     try:
@@ -148,9 +142,9 @@ def handle_client(connection,address):
                     except:
                         pass
             else:
-                connection.close()
+                writer.close()
     else:
-        connection.close()
+        writer.close()
     time_took = time.time() - start_time
     if time_took > 3.0:
         time_message = f"{libs.colors.colors.fg.red}{time_took}{libs.colors.colors.reset}"
@@ -158,14 +152,20 @@ def handle_client(connection,address):
         time_message = f"{libs.colors.colors.fg.green}{time_took}{libs.colors.colors.reset}"
     time_message_print = f"It took {time_message} seconds to proccess and return request\n"
     sys.stdout.write(time_message_print)
+    log_info(page_content[4],time_took,address,request_full_url,dateandtime)
+
 def server_main():
-    global sock
-    while True:  
+    loop = asyncio.get_event_loop()
+    coro = asyncio.start_server(handle_client, HOST,PORT, loop=loop)
+    server = loop.run_until_complete(coro)
+    try:
+        loop.run_forever()
+    except KeyboardInterrupt:
         try:
-            connection,address = sock.accept()
-            threading.Thread(target=handle_client, args=(connection,address)).start()
-        except KeyboardInterrupt:
-            sys.exit("\b\bShutting Down")
+            server.close()
+            loop.close()
+        except:
+            pass
+        sys.exit("\b\bShutting Down")
 threading.Thread(target=current_url).start()
-init()
 server_main()

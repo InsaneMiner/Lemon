@@ -31,5 +31,7 @@ def create(page_content):
     except (UnicodeDecodeError, AttributeError):
         page_content_1 = page_content[0]
     return f'HTTP/1.1 {page_content[4].status} OK\r\nDate: {str(libs.Date.httpdate())}\r\nServer: {str(config.config.SERVER)}\r\nLast-Modified: {str(libs.Date.httpdate())}\r\nContent-Length: {str(page_content[3])}\r\nContent-Type: {str(page_content[1])}{str(cookie_string)}\r\nConnection: Closed\r\n\r\n'.encode("utf-8",errors="ignore")+page_content_1
+
+
 def create_error(message,error_code):
     return f'HTTP/1.1 {error_code} OK\nDate: {str(libs.Date.httpdate())}\nServer: {str(config.config.SERVER)}\nLast-Modified: {str(libs.Date.httpdate())}\nContent-Length: {str(len(message))}\r\nContent-Type: text/html\r\nConnection: Closed\r\n\r\n{message}'.encode("utf-8")

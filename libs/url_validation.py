@@ -21,3 +21,4 @@ def validate_url(inputed_url,url_list):
             return [url1, url_data]
         else:
             continue
+    return [None,{}]
