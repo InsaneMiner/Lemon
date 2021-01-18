@@ -2,6 +2,7 @@
 import urllib.parse
 import libs.form_handle
 import codecs
+import re
 def split_header(h):
     return h.split(": ",1)
 def current_cookies(Cookies):
@@ -50,15 +51,8 @@ def http(headers,connection,address):
         else:
             is_cookie = False
     else:
-        is_cookie =False
-    first_data_get_or_post = url[0:3]
-    first_data_get_or_post_1 = url[0:4]
-    if first_data_get_or_post == "GET":
-        request_type = "GET"
-    elif first_data_get_or_post_1 == "POST":
-        request_type = "POST"
-    else:
-        request_type = "GET"
+        is_cookie = False
+    request_type = re.findall(r"([\w]{1,})\s",url)[0]
     if request_type == "GET":
         url = url.replace(url[:3], '')
         headers_ = {}
@@ -83,7 +77,8 @@ def http(headers,connection,address):
         headers_ = {}
         Temp = {}
         FILES = {}
-    url = url.replace("HTTP/1.1","",1).replace("HTTP/1.0","",1).replace("HTTP/2.0","",1)
+    HTTP_VERSION  = re.findall(r"(HTTP)/([0-9]\.[0-9])",url)
+    url = url.replace(f"HTTP/{HTTP_VERSION[0][1]}","",1)
     url = url.replace(" ","")
     if "?" in url:
         url_parts = url.split("?")
@@ -128,4 +123,5 @@ def http(headers,connection,address):
     object.request_type = request_type
     object.temp = Temp
     object.FILES = FILES
+    object.HTTP_VERSION = HTTP_VERSION[0][1]
     return object

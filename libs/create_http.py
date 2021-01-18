@@ -4,6 +4,7 @@ import config.config
 import libs.colors
 import threading
 import sys
+import libs.lemon
 def status_print(page_content):
 
     if page_content[4].status =="200":
@@ -29,5 +30,6 @@ def create(page_content):
         page_content_1 = page_content[0].encode("utf-8")
     except (UnicodeDecodeError, AttributeError):
         page_content_1 = page_content[0]
-    DATA = b'HTTP/1.1 '+page_content[4].status.encode("utf8")+b' OK\nDate: '+str(libs.Date.httpdate()).encode("utf-8")+ b'\nServer: '+str(config.config.SERVER).encode("utf-8")+ b'\nLast-Modified: '+str(libs.Date.httpdate()).encode("utf-8")+ b'\nContent-Length: '+str(page_content[3]).encode("utf-8")+ b'\nContent-Type: '+str(page_content[1]).encode("utf-8")+str(cookie_string).encode("utf-8")+ b'\nConnection: Closed\n\n'+page_content_1
-    return DATA
+    return f'HTTP/1.1 {page_content[4].status} OK\r\nDate: {str(libs.Date.httpdate())}\r\nServer: {str(config.config.SERVER)}\r\nLast-Modified: {str(libs.Date.httpdate())}\r\nContent-Length: {str(page_content[3])}\r\nContent-Type: {str(page_content[1])}{str(cookie_string)}\r\nConnection: Closed\r\n\r\n'.encode("utf-8",errors="ignore")+page_content_1
+def create_error(message,error_code):
+    return f'HTTP/1.1 {error_code} OK\nDate: {str(libs.Date.httpdate())}\nServer: {str(config.config.SERVER)}\nLast-Modified: {str(libs.Date.httpdate())}\nContent-Length: {str(len(message))}\r\nContent-Type: text/html\r\nConnection: Closed\r\n\r\n{message}'.encode("utf-8")

@@ -19,6 +19,7 @@ import random
 import libs.handleHttp
 import libs.colors
 import time
+import re
 sessions_  = {}
 
 
@@ -83,40 +84,71 @@ def handle_client(connection,address):
     else:
         run = True
     if run:
-
-
-        headers=b""
         buffer_size = 4096
+        http_request = {"data": b"","body": b"","request_size": 0}
+        current_http_status = 0
+        _ = 0
+        bad_request = 0
         while True:
             buf1 = connection.recv(buffer_size)
-            headers += buf1
-            if len(buf1) < buffer_size:
-                break
-            
-            
+            http_request["data"] = http_request["data"] + buf1
 
-        if headers.decode("utf-8","ignore").replace(" ","") != "":
-            request_object = libs.handleHttp.http(headers,connection,address)
-            print("Request: "+ request_object.page,end = "")
-            print(" ",end="")
-            object = libs.HttpObject.HttpObject(request_object.page,request_object.GET,request_object.POST,request_object.cookies,request_object.request_type)
-            object.status ="200"
-            object.FILES = request_object.FILES
-            object.temp = request_object.temp
-            object.headers = request_object.headers
-            
-            page_content = handle_request(object)
-            DATA = libs.create_http.create(page_content)
-            connection.send(DATA)
-            connection.close()
-            keys = list(page_content[4].FILES.keys())
-            for x in range(len(keys)):
+            if "\r\n\r\n" in http_request["data"].decode("utf-8",errors="ignore") and current_http_status != 1:
+                if  re.findall(r"Host:\s(.*)", http_request["data"].decode("utf-8",errors="ignore")) != []:
+                    if re.findall(r"Content\-Length:\s([0-9]{1,})", http_request["data"].decode("utf-8",errors="ignore")) == []:
+                        break
+                    else:
+                        http_request["body"] = bytes(http_request["data"].decode("utf-8",errors="ignore").split("\r\n\r\n")[1],"utf-8")
+                else:
+                    bad_request = 1
+                    print("[!] Bad Request")
+                    break
+            elif current_http_status == 1:
+                http_request["body"] = http_request["data"] + buf1
+
+            if http_request["request_size"] == 0:
                 try:
-                    os.remove(f"{config.config.TEMP}/{page_content[4].FILES[keys[x]]['temp']}")
-                except:
-                    pass
+                    content_length = re.findall(r"Content\-Length:\s([0-9]{1,})", http_request["data"].decode("utf-8",errors="ignore"))
+                    if content_length == []:
+                        pass
+                    else:
+                        http_request["request_size"] = int(content_length[0])
+                        
+                except Exception as e:
+                    print(e)
+            elif len(http_request["body"]) >= http_request["request_size"]:
+                break
+            _ += 1 
+        if bad_request == 1:
+            try:
+                connection.sendall(libs.create_http.create_error("Bad Request","400"))
+                connection.close()
+            except Exception as e:
+                print(e)
         else:
-            connection.close()
+            headers = http_request["data"]
+            if headers.decode("utf-8",errors="ignore").replace(" ","") != "":
+                request_object = libs.handleHttp.http(headers,connection,address)
+                print("Request: "+ request_object.page,end = "")
+                print(" ",end="")
+                object = libs.HttpObject.HttpObject(request_object.page,request_object.GET,request_object.POST,request_object.cookies,request_object.request_type)
+                object.status ="200"
+                object.FILES = request_object.FILES
+                object.temp = request_object.temp
+                object.headers = request_object.headers
+                
+                page_content = handle_request(object)
+                DATA = libs.create_http.create(page_content)
+                connection.send(DATA)
+                connection.close()
+                keys = list(page_content[4].FILES.keys())
+                for x in range(len(keys)):
+                    try:
+                        os.remove(f"{config.config.TEMP}/{page_content[4].FILES[keys[x]]['temp']}")
+                    except:
+                        pass
+            else:
+                connection.close()
     else:
         connection.close()
     time_took = time.time() - start_time
