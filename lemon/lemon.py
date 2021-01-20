@@ -71,7 +71,7 @@ async def handle_client(reader,writer):
     dateandtime = libs.Date.httpdate()
     address = writer.get_extra_info('peername')
     start_time = time.time()
-    if address in config.config.blacklist:
+    if address[0] in config.config.blacklist:
         run = False
     else:
         run = True
@@ -141,7 +141,7 @@ async def handle_client(reader,writer):
                 keys = list(page_content[4].FILES.keys())
                 for x in range(len(keys)):
                     try:
-                        pass #os.remove(f"{config.config.TEMP}/{page_content[4].FILES[keys[x]]['temp']}")
+                        os.remove(f"{config.config.TEMP}/{page_content[4].FILES[keys[x]]['temp']}")
                     except:
                         pass
             else:
