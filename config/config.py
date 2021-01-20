@@ -34,3 +34,6 @@ DEFAULT_MIME_TYPE = "text/plain"
 
 
 LOG_LOCATION  = "lemon/log.txt"
+
+
+SOCKET_BUFFER = 5000

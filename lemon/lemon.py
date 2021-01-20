@@ -76,7 +76,7 @@ async def handle_client(reader,writer):
     else:
         run = True
     if run:
-        buffer_size = 5000
+        buffer_size = config.config.SOCKET_BUFFER
         http_request = {"data": b"","body": b"","request_size": 0}
         current_http_status = 0
         bad_request = 0
