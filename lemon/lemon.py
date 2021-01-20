@@ -76,27 +76,28 @@ async def handle_client(reader,writer):
     else:
         run = True
     if run:
-        buffer_size = 4096
+        buffer_size = 5000
         http_request = {"data": b"","body": b"","request_size": 0}
         current_http_status = 0
-        _ = 0
         bad_request = 0
         while True:
             buf1 = await reader.read(buffer_size)
             http_request["data"] = http_request["data"] + buf1
-
             if "\r\n\r\n" in http_request["data"].decode("utf-8",errors="ignore") and current_http_status != 1:
                 if  re.findall(r"Host:\s(.*)", http_request["data"].decode("utf-8",errors="ignore")) != []:
                     if re.findall(r"Content\-Length:\s([0-9]{1,})", http_request["data"].decode("utf-8",errors="ignore")) == []:
                         break
                     else:
+                    
+                        current_http_status = 1
                         http_request["body"] = bytes(http_request["data"].decode("utf-8",errors="ignore").split("\r\n\r\n")[1],"utf-8")
                 else:
                     bad_request = 1
                     print("[!] Bad Request")
                     break
             elif current_http_status == 1:
-                http_request["body"] = http_request["data"] + buf1
+               
+                http_request["body"] = http_request["body"] + buf1
 
             if http_request["request_size"] == 0:
                 try:
@@ -105,12 +106,14 @@ async def handle_client(reader,writer):
                         pass
                     else:
                         http_request["request_size"] = int(content_length[0])
-                        
                 except Exception as e:
                     print(e)
-            elif len(http_request["body"]) >= http_request["request_size"]:
+            elif http_request["request_size"] <= sys.getsizeof(str(http_request["body"])):
                 break
-            _ += 1 
+            print(http_request["request_size"], sys.getsizeof(str(http_request["body"])))
+
+        
+
         if bad_request == 1:
             try:
                 writer.write(libs.create_http.create_error("Bad Request","400"))
@@ -138,7 +141,7 @@ async def handle_client(reader,writer):
                 keys = list(page_content[4].FILES.keys())
                 for x in range(len(keys)):
                     try:
-                        os.remove(f"{config.config.TEMP}/{page_content[4].FILES[keys[x]]['temp']}")
+                        pass #os.remove(f"{config.config.TEMP}/{page_content[4].FILES[keys[x]]['temp']}")
                     except:
                         pass
             else:
@@ -153,6 +156,8 @@ async def handle_client(reader,writer):
     time_message_print = f"It took {time_message} seconds to proccess and return request\n"
     sys.stdout.write(time_message_print)
     log_info(page_content[4],time_took,address,request_full_url,dateandtime)
+
+    return 0
 
 def server_main():
     loop = asyncio.get_event_loop()
