@@ -1,7 +1,7 @@
 # Lemon Documentation
 
 ### What is Lemon
-Lemon is a web framework written in python. Lemon is easy to start with, even if you are a begginer with python, you can create a basic website.
+Lemon is a web framework written in python. Lemon is easy to start with, even if you are a begginer with python, you can create a website.
 ### Why use Lemon
 Lemon is simple to use but you can also make great web applications with it.
 Its easier than django, but not written like flask.
