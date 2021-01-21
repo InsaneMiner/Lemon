@@ -24,14 +24,6 @@ import asyncio
 sessions_  = {}
 
 
-
-def current_url():
-    global PORT
-    if PORT == 80:
-        print("Server address: http://localhost/")
-    else:
-        print(f"Server address: http://localhost:{str(PORT)}/")
-
 def get_random_string(length=config.config.token_length):
     letters = string.ascii_lowercase
     result_str = ''.join(random.choice(letters) for i in range(length))
@@ -77,6 +69,7 @@ async def handle_client(reader,writer):
         run = True
     if run:
         buffer_size = config.config.SOCKET_BUFFER
+
         http_request = {"data": b"","body": b"","request_size": 0}
         current_http_status = 0
         bad_request = 0
@@ -172,5 +165,4 @@ def server_main():
         except:
             pass
         sys.exit("\b\bShutting Down")
-threading.Thread(target=current_url).start()
 server_main()
