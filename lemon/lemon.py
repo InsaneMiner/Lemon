@@ -21,7 +21,12 @@ import libs.colors
 import time
 import re
 import asyncio
+import libs.logging
+import signal
 sessions_  = {}
+
+
+
 
 
 def get_random_string(length=config.config.token_length):
@@ -58,6 +63,8 @@ def handle_request(object):
 def log_info(object,time_took,address,request_full_url,dateandtime):
     with open(config.config.LOG_LOCATION,"a+") as log_file:
         log_file.write(f"TIMETOOK[{time_took}] DATE&TIME[\"{dateandtime}\"] IP[{address[0]}] URL[\"{object.url}\"] REQUEST[\"{request_full_url}\"] STATUS[{object.status}]\n")
+
+
 
 async def handle_client(reader,writer):
     dateandtime = libs.Date.httpdate()
@@ -119,24 +126,29 @@ async def handle_client(reader,writer):
             if headers.decode("utf-8",errors="ignore").replace(" ","") != "":
                 request_full_url = headers.decode("utf-8",errors="ignore").split("\r\n")[0]
                 request_object = libs.handleHttp.http(headers)
-                print("Request: "+ request_object.page,end = "")
-                print(" ",end="")
-                object = libs.HttpObject.HttpObject(request_object.page,request_object.GET,request_object.POST,request_object.cookies,request_object.request_type)
-                object.status ="200"
-                object.FILES = request_object.FILES
-                object.temp = request_object.temp
-                object.headers = request_object.headers
-                page_content = handle_request(object)
-                DATA = libs.create_http.create(page_content)
-                writer.write(DATA)
-                await writer.drain()
-                writer.close()
-                keys = list(page_content[4].FILES.keys())
-                for x in range(len(keys)):
-                    try:
-                        os.remove(f"{config.config.TEMP}/{page_content[4].FILES[keys[x]]['temp']}")
-                    except:
-                        pass
+                if request_object.headers["Host"].split(":")[0] not in config.config.ALLOWED_HOSTS:
+                    writer.write(libs.create_http.create_error("Bad Request, Host header incorrect","400"))
+                    await writer.drain()
+                    writer.close()
+                else:                
+                    print("Request: "+ request_object.page,end = "")
+                    print(" ",end="")
+                    object = libs.HttpObject.HttpObject(request_object.page,request_object.GET,request_object.POST,request_object.cookies,request_object.request_type)
+                    object.status ="200"
+                    object.FILES = request_object.FILES
+                    object.temp = request_object.temp
+                    object.headers = request_object.headers
+                    page_content = handle_request(object)
+                    DATA = libs.create_http.create(page_content)
+                    writer.write(DATA)
+                    await writer.drain()
+                    writer.close()
+                    keys = list(page_content[4].FILES.keys())
+                    for x in range(len(keys)):
+                        try:
+                            os.remove(f"{config.config.TEMP}/{page_content[4].FILES[keys[x]]['temp']}")
+                        except:
+                            pass
             else:
                 writer.close()
     else:
@@ -146,8 +158,10 @@ async def handle_client(reader,writer):
         time_message = f"{libs.colors.colors.fg.red}{time_took}{libs.colors.colors.reset}"
     else:
         time_message = f"{libs.colors.colors.fg.green}{time_took}{libs.colors.colors.reset}"
-    time_message_print = f"It took {time_message} seconds to proccess and return request\n"
-    sys.stdout.write(time_message_print)
+   
+    libs.logging.log("It took ")
+    libs.logging.log(time_message)
+    libs.logging.log(" seconds to proccess and return request\n")
     log_info(page_content[4],time_took,address,request_full_url,dateandtime)
 
     return 0
@@ -155,7 +169,12 @@ async def handle_client(reader,writer):
 def server_main():
     loop = asyncio.get_event_loop()
     coro = asyncio.start_server(handle_client, HOST,PORT, loop=loop)
-    server = loop.run_until_complete(coro)
+    try:
+        server = loop.run_until_complete(coro)
+    except OSError as sock_error:
+        if sock_error.errno == 98:
+            libs.logging.error("Socket already in use. Exiting...")
+            sys.exit(0)
     try:
         loop.run_forever()
     except KeyboardInterrupt:
@@ -164,5 +183,6 @@ def server_main():
             loop.close()
         except:
             pass
-        sys.exit("\b\bShutting Down")
+        libs.logging.good("\b\bShutting Down\n")
+        sys.exit(0)
 server_main()

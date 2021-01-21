@@ -37,3 +37,6 @@ LOG_LOCATION  = "lemon/log.txt"
 
 
 SOCKET_BUFFER = 5000
+
+
+ALLOWED_HOSTS = ["localhost"]

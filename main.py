@@ -7,29 +7,29 @@ import sys
 import subprocess
 import config.config
 import libs.colors
+import libs.logging
+import socket
+def request_self():
+    client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  
+    client.connect((config.config.HOST,config.config.PORT))  
+    request = "GET / HTTP/1.1\r\nHost:%s\r\n\r\n" % config.config.ALLOWED_HOSTS[0]
+    client.send(request.encode())  
+    response = client.recv(4096)  
 def current_url():
     if config.config.PORT == 80:
-        print(f"{libs.colors.colors.bold}{libs.colors.colors.fg.cyan}Server address: {libs.colors.colors.fg.orange}http://localhost/{libs.colors.colors.reset}")
+        print(f"{libs.colors.colors.bold}{libs.colors.colors.fg.cyan}Server address: {libs.colors.colors.fg.yellow}http://localhost/{libs.colors.colors.reset}")
     else:
-        print(f"{libs.colors.colors.bold}{libs.colors.colors.fg.cyan}Server address: {libs.colors.colors.fg.orange}http://localhost:{str(config.config.PORT)}/{libs.colors.colors.reset}")
-
-all_processes = []
+        print(f"{libs.colors.colors.bold}{libs.colors.colors.fg.cyan}Server address: {libs.colors.colors.fg.yellow}http://localhost:{str(config.config.PORT)}/{libs.colors.colors.reset}")
+process = None
 def restart_server():
     kill_processes()
     start_server()
-
-
-
 def start_server():
-    global all_processes
+    global process
     process = subprocess.Popen(['python3', 'main.py', 'server_no_watchdog'])
-    all_processes.append(process) 
-
 def kill_processes():
-    global all_processes
-    for process in all_processes: 
-        process.kill() 
-    all_processes = []
+    global process
+    process.kill() 
 class OnMyWatch: 
     # Set the directory on watch 
     watchDirectory = "pages"
@@ -43,7 +43,9 @@ class OnMyWatch:
         self.observer.start() 
         try: 
             while True: 
-                time.sleep(5) 
+                time.sleep(1)
+                if process.poll() != None:
+                    sys.exit() 
         except: 
             self.observer.stop() 
         self.observer.join() 
@@ -59,8 +61,9 @@ class Handler(FileSystemEventHandler):
             restart_server()
 if __name__ == '__main__': 
     if len(sys.argv) < 2:
+        libs.logging.notice("Starting Watchdog\n")
+        libs.logging.notice("Starting Server\n")
         start_server()
-        print(f"{libs.colors.colors.bold}{libs.colors.colors.fg.yellow}Starting Watchdog{libs.colors.colors.reset}")
         current_url()
         watch = OnMyWatch() 
         watch.run() 
@@ -68,5 +71,6 @@ if __name__ == '__main__':
         if sys.argv[1] == "server_no_watchdog":
             import lemon.lemon
         else:
-            print("Error: This is not a useless run")
-            sys.exit("Shutting Down")
+            libs.logging.error("Error: This is not a useless run\n")
+            libs.logging.good("Shutting Down\n")
+            sys.exit()
