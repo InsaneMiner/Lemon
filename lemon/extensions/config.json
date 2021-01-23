@@ -1,0 +1,17 @@
+{
+    "cgi":
+    {
+        ".py":
+        {
+            "python_cgi":
+            {
+                "location": "python_cgi",
+                "extension-main-file": "cgi.py",
+                "Author": "InsaneMiner",
+                "Description": "Allows you to run .py files. Only works on linux",
+                "Version": "0.0.1",
+                "Mime-Type" :"text/html"
+            }
+        }
+    }
+}

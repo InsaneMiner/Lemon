@@ -40,3 +40,12 @@ SOCKET_BUFFER = 5000
 
 
 ALLOWED_HOSTS = ["localhost"]
+
+
+
+EXTENSIONS_CONFIG = "lemon/extensions/config.json"
+
+
+
+
+USER_MODULE_PATH = "lemon/user/libs/"

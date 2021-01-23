@@ -1,0 +1,4 @@
+{
+    "setup_script": "setup.py",
+    "packages": ["sockets","json","watchdog"]
+}

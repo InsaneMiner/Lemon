@@ -9,6 +9,12 @@ import config.config
 import libs.colors
 import libs.logging
 import socket
+
+def define_user_modules():
+    sys.path.append(config.config.USER_MODULE_PATH)
+
+
+
 def request_self():
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  
     client.connect((config.config.HOST,config.config.PORT))  
@@ -69,6 +75,7 @@ if __name__ == '__main__':
         watch.run() 
     else:
         if sys.argv[1] == "server_no_watchdog":
+            define_user_modules()
             import lemon.lemon
         else:
             libs.logging.error("Error: This is not a useless run\n")

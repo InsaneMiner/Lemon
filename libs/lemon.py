@@ -9,26 +9,30 @@ import libs.html_to_htpy
 import random
 import string
 import threading
+import libs.extensions
+import sys
 
+extensions = libs.extensions.extensions(config.config.EXTENSIONS_CONFIG)
 
 def ext(file):
     filename, file_extension = os.path.splitext(file)
     return file_extension.lower()
-
-
-
-
-
-
 def render_static(object,file):
     try:
-        with open(f"{config.config.STATIC}/{file}","rb") as fo:
-            content = fo.read()
-        file_size = os.path.getsize(f"{config.config.STATIC}/{file}")
-        if ext(file) in libs.file_extensions.extensions:
-            return HttpOutput(object,content,libs.file_extensions.extensions[ext(file)],file_size)
+        if extensions.check_cgi(ext(file)):
+            content = extensions.cgi(ext(file),f"{config.config.STATIC}/{file}",object)
+            mime_type = extensions.extensions['cgi'][ext(file)][list(extensions.extensions['cgi'][ext(file)])[0]]['Mime-Type']
+            file_size = sys.getsizeof(content)
         else:
-            return HttpOutput(object,content,config.config.DEFAULT_MIME_TYPE,file_size)
+            with open(f"{config.config.STATIC}/{file}","rb") as fo:
+                content = fo.read()
+            if ext(file) in libs.file_extensions.extensions:
+                mime_type = libs.file_extensions.extensions[ext(file)]
+            else:
+                mime_type = config.config.DEFAULT_MIME_TYPE
+                file_size = os.path.getsize(f"{config.config.STATIC}/{file}")
+        return HttpOutput(object,content,mime_type,file_size)
+       
     except PermissionError:
         object.status = "403"
         return pages.errors.e403(object)

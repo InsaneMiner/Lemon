@@ -1,0 +1,14 @@
+{
+    "cgi" :
+    {
+        "WAF":
+            {
+                "location": "WAF",
+                "extension-main-file": "waf_system.py",
+                "Author": "InsaneMiner",
+                "Description": "WAF system",
+                "Version": "0.0.1",
+                "Mime-Type" :"text/html"
+            }
+    }
+}

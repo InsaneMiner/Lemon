@@ -110,7 +110,6 @@ async def handle_client(reader,writer):
                     print(e)
             elif http_request["request_size"] <= sys.getsizeof(str(http_request["body"])):
                 break
-            print(http_request["request_size"], sys.getsizeof(str(http_request["body"])))
 
         
 
