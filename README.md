@@ -19,7 +19,7 @@ To run just run main.py file.
 ### Where looking for people
 Where looking for someone who could help rewrite the documentation
 ## Images
-  ![screenshot](https://raw.githubusercontent.com/InsaneMiner/Lemon/main/images/screenshots/screenshot.png)
+  ![screenshot](https://raw.githubusercontent.com/InsaneMiner/Lemon/main/images/screenshots/Screenshot%20from%202021-01-25%2015-26-35.png)
 ## Why use lemon
  - lemon requires no installation
  - lemon is easy to customize
