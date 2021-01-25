@@ -30,7 +30,7 @@ def render_static(object,file):
                 mime_type = libs.file_extensions.extensions[ext(file)]
             else:
                 mime_type = config.config.DEFAULT_MIME_TYPE
-                file_size = os.path.getsize(f"{config.config.STATIC}/{file}")
+            file_size = os.path.getsize(f"{config.config.STATIC}/{file}")
         return HttpOutput(object,content,mime_type,file_size)
        
     except PermissionError:
