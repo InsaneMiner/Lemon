@@ -16,8 +16,6 @@ This project is a web server/web framework written in python. You can write a we
 ### How to use
 To run just run main.py file.
 <br>
-### Where looking for people
-Where looking for someone who could help rewrite the documentation
 ## Images
   ![screenshot](https://raw.githubusercontent.com/InsaneMiner/Lemon/main/images/screenshots/Screenshot%20from%202021-01-25%2015-26-35.png)
 ## Why use lemon
