@@ -19,7 +19,6 @@ import libs.url_validation
 
 urls = {
     "/":"main",
-    "/root/<page>":"main"
     } 
 
 
