@@ -85,6 +85,7 @@ async def handle_client(reader,writer):
             current_http_status = 0
             bad_request = 0
             command_type_varified = None
+            content_length = None
             while True:
                 buf1 = await reader.read(buffer_size)
                 http_request["data"] = http_request["data"] + buf1
@@ -130,8 +131,9 @@ async def handle_client(reader,writer):
                         break
                     else:
                         pass
-                elif len(http_request["body"]) >= int(re.findall(r"Content\-Length:\s([0-9]{1,})", http_request["data"].decode("utf-8",errors="ignore"))[0]):
-                    break
+                elif content_lenght != None:
+                    if len(http_request["body"]) >= content_length:
+                        break
             if bad_request == 1:
                 try:
                     writer.write(libs.create_http.create_error("Bad Request","400"))
