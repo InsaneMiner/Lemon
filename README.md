@@ -5,7 +5,7 @@
 
 
 
-This project is still in beta. Almost out of beta<br>
+
 Feel welcome to make a pull request. This project is open source so do what ever you want with it. 
 <br>
 Watch for more info: https://www.youtube.com/watch?v=PYr8js5QY1M
