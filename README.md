@@ -15,6 +15,8 @@ This project is a web server/web framework written in python. You can write a we
 <br>
 Lemon has not been tested on windows or mac, so if there is any issues please report them in the issues area.
 <br>
+Lemon is not for production.
+<br>
 ### How to use
 Windows
 ```
@@ -36,3 +38,9 @@ $ pip3 install -r requirements.txt
 ## Screenshots and Images
 ![screenshot](https://raw.githubusercontent.com/InsaneMiner/Lemon/main/images/screenshots/Screenshot%20from%202021-01-25%2015-26-35.png)
 
+### What needs doing
+ - Make multipart-form/data faster when uploading large files
+ - error handling more reliable
+ - needs a debug mode for easier debuging
+ - sql interface for easy database usage
+ - crsf tokens for more security
