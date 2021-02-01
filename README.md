@@ -13,13 +13,27 @@ Watch for more info: https://www.youtube.com/watch?v=PYr8js5QY1M
 ### Info
 This project is a web server/web framework written in python. You can write a web app with python in this new web framework.
 <br>
+Lemon has not been tested on windows or mac, so if there is any issues please report them in the issues area.
+<br>
 ### How to use
-To run just run main.py file.
+Windows
+```
+$ python main.py
+```
+Linux and Mac
+```
+$ python3 main.py
+```
+### How to install all needed packages
+Windows
+```
+$ pip install -r requirements.txt
+```
+Linux and Mac
+```
+$ pip3 install -r requirements.txt
+```
 <br>
 ## Images
   ![screenshot](https://raw.githubusercontent.com/InsaneMiner/Lemon/main/images/screenshots/Screenshot%20from%202021-01-25%2015-26-35.png)
-## Why use lemon
- - lemon requires no installation
- - lemon is easy to customize
- - lemon is easy to use
- - very simple to start
+
