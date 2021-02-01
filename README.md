@@ -33,7 +33,6 @@ Linux and Mac
 ```
 $ pip3 install -r requirements.txt
 ```
-<br>
-## Images
-  ![screenshot](https://raw.githubusercontent.com/InsaneMiner/Lemon/main/images/screenshots/Screenshot%20from%202021-01-25%2015-26-35.png)
+## Screenshots and Images
+![screenshot](https://raw.githubusercontent.com/InsaneMiner/Lemon/main/images/screenshots/Screenshot%20from%202021-01-25%2015-26-35.png)
 
