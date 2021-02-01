@@ -105,6 +105,8 @@ async def handle_client(reader,writer):
                                 pass
                             if len(http_request["body"]) >= int(re.findall(r"Content\-Length:\s([0-9]{1,})", http_request["data"].decode("utf-8",errors="ignore"))[0]):
                                 break
+                            if http_request["data"].decode("utf-8",errors="ignore")[:3].lower() == "get":
+                                break
                     else:
                         bad_request = 1
                         print("[!] Bad Request")
@@ -131,7 +133,7 @@ async def handle_client(reader,writer):
                         break
                     else:
                         pass
-                elif content_lenght != None:
+                elif content_length != None:
                     if len(http_request["body"]) >= content_length:
                         break
             if bad_request == 1:
