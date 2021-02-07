@@ -7,24 +7,15 @@ PORT = config.config.PORT
 SERVER = config.config.SERVER
 import libs.Date
 import socket
-import os
-import threading
 import libs.lemon
-import sys
 import libs.create_http
 import pages.urls
 import libs.HttpObject
-import string
-import random
 import libs.handleHttp
 import libs.colors
-import time
-import re
-import asyncio
 import libs.logging
-import base64
-import cProfile, pstats
-import concurrent.futures
+import base64, asyncio, re, time, string, random, sys, threading, os, concurrent.futures
+#import cProfile, pstats
 
 
 
@@ -76,7 +67,7 @@ def log_info(object,time_took,address,request_full_url,dateandtime):
 
 
 async def handle_client(reader,writer):
-    prof = cProfile.Profile()
+    #prof = cProfile.Profile()
     timed_out = 0
     try:
         dateandtime = libs.Date.httpdate()
@@ -88,7 +79,7 @@ async def handle_client(reader,writer):
             run = True
         if run:
 
-            prof.enable()
+            #prof.enable()
             buffer_size = config.config.SOCKET_BUFFER
             http_request = {"data": b"","body": b"","request_size": 0}
             current_http_status = 0
@@ -152,9 +143,9 @@ async def handle_client(reader,writer):
                     break
 
 
-            prof.disable()
-            stats = pstats.Stats(prof).sort_stats('cumtime')
-            stats.print_stats()
+            #prof.disable()
+            #stats = pstats.Stats(prof).sort_stats('cumtime')
+            #stats.print_stats()
             if bad_request == 1:
                 try:
                     writer.write(libs.create_http.create_error("Bad Request","400"))
