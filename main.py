@@ -67,14 +67,18 @@ class Handler(FileSystemEventHandler):
             restart_server()
 if __name__ == '__main__': 
     if len(sys.argv) < 2:
-        libs.logging.notice("Starting Watchdog\n")
-        libs.logging.notice("Starting Server\n")
-        start_server()
-        current_url()
-        watch = OnMyWatch() 
-        watch.run() 
+        if config.config.DEBUG == False:
+            define_user_modules()
+            import lemon.lemon
+        else:
+            libs.logging.notice("Starting Watchdog\n")
+            libs.logging.notice("Starting Server\n")
+            start_server()
+            current_url()
+            watch = OnMyWatch() 
+            watch.run() 
     else:
-        if sys.argv[1] == "server_no_watchdog":
+        if sys.argv[1] == "server_no_watchdog" or config.config.DEBUG:
             define_user_modules()
             import lemon.lemon
         else:

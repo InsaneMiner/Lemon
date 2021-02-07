@@ -12,3 +12,11 @@ class HttpObject:
         object.temp = {}
         object.FILES = {}
         object.sessionReset = False
+        object.response_headers = {
+            "Date": "",
+            "Server": "", 
+            "Last-Modified": "" ,
+            "Content-Length" : "",
+            "Content-Type": "",
+            "Connection": "Closed", 
+        }

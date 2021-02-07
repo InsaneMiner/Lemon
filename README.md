@@ -43,5 +43,4 @@ $ pip3 install -r requirements.txt
  - error handling more reliable
  - needs a debug mode for easier debuging
  - sql interface for easy database usage
- - crsf tokens for more security
  - more security features

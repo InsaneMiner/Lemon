@@ -12,7 +12,7 @@ STATIC = "static"
 RENDER = "render"
 
 ## Token info for sessions
-token = "auth_token"
+token = "SessionToken"
 token_length = 100
 
 
@@ -36,10 +36,10 @@ DEFAULT_MIME_TYPE = "text/plain"
 LOG_LOCATION  = "lemon/log.txt"
 
 
-SOCKET_BUFFER = 64000
+SOCKET_BUFFER = 65536
 
 
-ALLOWED_HOSTS = ["localhost"]
+ALLOWED_HOSTS = ["localhost","127.0.0.1"]
 
 
 
@@ -49,3 +49,12 @@ EXTENSIONS_CONFIG = "lemon/extensions/config.json"
 
 
 USER_MODULE_PATH = "lemon/user/libs/"
+
+
+
+
+
+
+DEBUG = True
+
+ASYNCIO_MAX_WORKERS = 1000

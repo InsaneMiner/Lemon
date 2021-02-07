@@ -1,6 +1,6 @@
 #cython: language_level=3
 import os
-import pages.errors
+import libs.errors
 import libs.file_extensions
 import os.path
 import config.config
@@ -34,19 +34,15 @@ def render_static(object,file):
         return HttpOutput(object,content,mime_type,file_size)
        
     except PermissionError:
-        object.status = "403"
-        return pages.errors.e403(object)
+        return libs.errors.error(object,403)
     except (IsADirectoryError,FileNotFoundError):
-        object.status = "404"
-        return pages.errors.e404(object)
+        return libs.errors.error(object,404)
     except OSError as exc:
         if exc.errno == 36:
-            object.status = "404"
-            return pages.errors.e404(object)
+            return libs.errors.error(object,404)
     except Exception as e:
         print(e)
-        object.status = "500"
-        return pages.errors.e500(object)
+        return libs.errors.error(object,500)
 
 
 
@@ -82,15 +78,12 @@ def Render(object,file,var={}):
         else:
             return HttpOutput(object,content,config.config.DEFAULT_MIME_TYPE,file_size)
     except PermissionError:
-        object.status = "403"
-        return pages.errors.e403(object)
+        return libs.errors.error(object,403)
     except FileNotFoundError:
-        object.status = "404"
-        return pages.errors.e404(object)
+        return libs.errors.error(object,404)
     except Exception as e:
         print(e)
-        object.status = "500"
-        return pages.errors.e500(object)
+        return libs.errors.error(object,500)
 
 
 def RenderPath(object,file,var={}):
@@ -115,15 +108,12 @@ def RenderPath(object,file,var={}):
         else:
             return HttpOutput(object,content,config.config.DEFAULT_MIME_TYPE,file_size)
     except PermissionError:
-        object.status = "403"
-        return pages.errors.e403(object)
+        return libs.errors.error(object,403)
     except FileNotFoundError:
-        object.status = "404"
-        return pages.errors.e404(object)
+        return libs.errors.error(object,404)
     except Exception as e:
         print(e)
-        object.status = "500"
-        return pages.errors.e500(object)
+        return libs.errors.error(object,500)
 
 
 
@@ -140,13 +130,31 @@ def HttpOutput(object,output,_type,size):
     else:
         pass
     cookies1 = ""
+    rotation = 1
     for key in Cookies.keys():
-        cookies1 += f"Set-Cookie: {key}={Cookies[key]};\n"
+        if rotation == 1:
+            if rotation == len(Cookies):
+                cookies1 += f"{key}={Cookies[key]};"
+            else:
+                cookies1 += f"{key}={Cookies[key]};\r\n"
+
+        else:
+            
+            if rotation == len(Cookies):
+                cookies1 += f"Set-Cookie: {key}={Cookies[key]};"
+            else:
+                cookies1 += f"Set-Cookie: {key}={Cookies[key]};\r\n"
+        rotation+=1
+        
     if cookies1 == "":
         pass
     else:
+        object.response_headers["Set-Cookie"] = cookies1
         cookies1 = cookies1.rstrip("\n")
-    return [output,_type,cookies1,size,object]
+    #set some headers
+    object.response_headers["Content-Type"] = str(_type)
+    object.response_headers["Content-Length"] = str(size)
+    return [output,object]
 
 
 
@@ -158,14 +166,36 @@ def HttpOutputVar(object,output,_type,size,var={}):
     else:
         pass
     cookies1 = ""
+    rotation = 1
     for key in Cookies.keys():
-        cookies1 += f"Set-Cookie: {key}={Cookies[key]};\n"
+        if rotation == 1:
+            if rotation == len(Cookies):
+                cookies1 += f"{key}={Cookies[key]};"
+            else:
+                cookies1 += f"{key}={Cookies[key]};\r\n"
+
+        else:
+            
+            if rotation == len(Cookies):
+                cookies1 += f"Set-Cookie: {key}={Cookies[key]};"
+            else:
+                cookies1 += f"Set-Cookie: {key}={Cookies[key]};\r\n"
+        rotation+=1
+
+
     if cookies1 == "":
         pass
     else:
+        object.response_headers["Set-Cookie"] = cookies1
         cookies1 = cookies1.rstrip("\n")
     output = libs.html_to_htpy.convert_to(output,var).encode("utf-8")
-    return [output,_type,cookies1,size,object]
+    #set some headers
+    object.response_headers["Content-Type"] = str(_type)
+    object.response_headers["Content-Length"] = str(size)
+
+
+    
+    return [output,object]
 
 
 
@@ -176,9 +206,10 @@ def HttpOutputVar(object,output,_type,size,var={}):
 
 
 def redirect(object,url):
-    data = f"<!DOCTYPE html><html><head><meta http-equiv=\"Refresh\" content=\"0; url='{url}'\" /></head><body></body></html>"
+    object.response_headers["Location"] = url
+    object.status = "302"
     print("\nredirecting:",object.url,"-->",url)
-    return HttpOutput(object,data,"text/html","None")
+    return HttpOutput(object,"","text/html","None")
 
 
 
