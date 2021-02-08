@@ -15,29 +15,53 @@ import libs.handleHttp
 import libs.colors
 import libs.logging
 import base64, asyncio, re, time, string, random, sys, threading, os, concurrent.futures
-#import cProfile, pstats
+import cProfile, pstats
 
-
+try:
+    import ssl
+except:
+    libs.logging.error("No ssl")
 
 sessions_  = {}
 
 
 
-
-
 def get_random_string(length=config.config.token_length):
+    """
+    
+    This function just generates a random token. 
+    This token is a random string.
+
+    """
     letters = string.ascii_lowercase
     result_str = ''.join(random.choice(letters) for i in range(length))
     return result_str
 
 def reset_session(data,id_):
+    """
+
+    This function resets the current clients session.
+
+    """
     global sessions_
     if data[1].sessionReset:
         sessions_ = sessions_.pop(id_)
     else:
         sessions_[id_] = data[1].session
 
+
 def handle_request(object):
+    """
+
+    This takes in the request object. The request object has info 
+    like url that is requested, cookies, files that have been uploaded, 
+    headers and more. This function will use this request object, and find 
+    the app code for the url that has been requested by the client.
+    It will also make sure the client has a session id. If the client does 
+    not have a session id it will asign the client with one. It will also reset all 
+    session data if told to.
+
+    """
     global sessions_
     if config.config.token in object.cookies:
         if object.cookies[config.config.token] in sessions_:
@@ -56,18 +80,36 @@ def handle_request(object):
     threading.Thread(target=reset_session,args=(data,id_)).start()
     return data
 
+
+
+
+
 def log_info(object,time_took,address,request_full_url,dateandtime):
+    """
+
+    This will log the request info. This will log the time it took to handle the request and some more info. 
+    
+    """
+
     with open(config.config.LOG_LOCATION,"a+") as log_file:
         log_file.write(f"TIMETOOK[{time_took}] DATE&TIME[\"{dateandtime}\"] IP[{address[0]}] URL[\"{object.url}\"] REQUEST[\"{request_full_url}\"] STATUS[{object.status}]\n")
 
 
-
 # Content-Type header: Content\-Type\:\smultipart/form\-data\;\sboundary\=(.*?)\n$
-# 
-
+ 
 
 async def handle_client(reader,writer):
-    #prof = cProfile.Profile()
+    """
+
+    This function handles the client.
+    The slowest part of this function is receiving the request. 
+    The hard part of receiving multi-part/formdata is it needs 
+    to find the end of the request. This can be hard and slow 
+    when the file is large.
+
+
+    """
+    prof = cProfile.Profile()
     timed_out = 0
     try:
         dateandtime = libs.Date.httpdate()
@@ -79,7 +121,7 @@ async def handle_client(reader,writer):
             run = True
         if run:
 
-            #prof.enable()
+            prof.enable()
             buffer_size = config.config.SOCKET_BUFFER
             http_request = {"data": b"","body": b"","request_size": 0}
             current_http_status = 0
@@ -143,8 +185,8 @@ async def handle_client(reader,writer):
                     break
 
 
-            #prof.disable()
-            #stats = pstats.Stats(prof).sort_stats('cumtime')
+            prof.disable()
+            stats = pstats.Stats(prof).sort_stats('cumtime')
             #stats.print_stats()
             if bad_request == 1:
                 try:
@@ -192,9 +234,9 @@ async def handle_client(reader,writer):
             writer.close()
         time_took = time.time() - start_time
         if time_took > 3.0:
-            time_message = f"{libs.colors.colors.fg.red}{time_took}{libs.colors.colors.reset}"
+            time_message = "{}{}{}".format(libs.colors.colors.fg.red, time_took,libs.colors.colors.reset)
         else:
-            time_message = f"{libs.colors.colors.fg.green}{time_took}{libs.colors.colors.reset}"
+            time_message = "{}{}{}".format(libs.colors.colors.fg.green,time_took,libs.colors.colors.reset)
     
         libs.logging.log("It took ")
         libs.logging.log(time_message)
@@ -206,7 +248,7 @@ async def handle_client(reader,writer):
         keys = list(page_content[1].FILES.keys())
         for x in range(len(keys)):
             try:
-                os.remove(f"{config.config.TEMP}/{page_content[1].FILES[keys[x]]['temp']}")
+                os.remove("{}/{}").format(config.config.TEMP,page_content[1].FILES[keys[x]]['temp'])
             except:
                 pass
 
@@ -215,30 +257,101 @@ async def handle_client(reader,writer):
         print(e)
         writer.close()
         libs.logging.error("A error has occured while handling request\n")
-        
 
-def server_main():
+
+
+
+
+
+
+def start_non_ssl_server():
     try:
-        loop = asyncio.get_event_loop()
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        """
+        Sets the asyncio workers to the value of config.config.ASYNCIO_MAX_WORKERS. 
+        The default value is 1000. so the default workers is 1000.
+        """
         loop.set_default_executor(concurrent.futures.ThreadPoolExecutor(config.config.ASYNCIO_MAX_WORKERS))
+        """
+        Starts the http server.
+        """
         loop.create_task(asyncio.start_server(handle_client, HOST, PORT))
+        """
+        this makes the server run forever
+        """
         loop.run_forever()
+    except KeyboardInterrupt:
+        sys.exit(0)
     except OSError as sock_error:
         if sock_error.errno == 98:
             libs.logging.error("Socket already in use. Exiting...\n")
             sys.exit(0)
-    except KeyboardInterrupt:
-        try:
-            loop.close()
-        except:
-            pass
-        libs.logging.good("\b\bShutting Down\n")
-        sys.exit(0)
-
-    except:
+    except Exception as e:
         libs.logging.error("A error has occured while creating server socket\n")
+        libs.logging.log(e)
+
+def start_ssl_server(ssl_context):
+    try:
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        """
+        Sets the asyncio workers to the value of config.config.ASYNCIO_MAX_WORKERS. 
+        The default value is 1000. so the default workers is 1000.
+        """
+        loop.set_default_executor(concurrent.futures.ThreadPoolExecutor(config.config.ASYNCIO_MAX_WORKERS))
+        """
+        Starts the http server.
+        """
+        loop.create_task(asyncio.start_server(handle_client, HOST, config.config.SSL_PORT, ssl= ssl_context))
+        """
+        this makes the server run forever
+        """
+        loop.run_forever()
+    except KeyboardInterrupt:
+        sys.exit(0)
+    except OSError as sock_error:
+        if sock_error.errno == 98:
+            libs.logging.error("Socket already in use. Exiting...\n")
+            sys.exit(0)
+    except Exception as e:
+        libs.logging.error("A error has occured while creating server socket\n")
+        libs.logging.log(e)
+def server_main():
+        if config.config.NORMAL_SERVER:
+            try:
+                normal_thread = threading.Thread(target=start_non_ssl_server)
+                normal_thread.daemon=True
+                normal_thread.start()
+            except KeyboardInterrupt:
+                sys.exit(0)
+            except OSError as sock_error:
+                if sock_error.errno == 98:
+                    libs.logging.error("Socket already in use. Exiting...\n")
+                    sys.exit(0)
+            except Exception as e:
+                libs.logging.error("A error has occured while creating server socket\n")
+                libs.logging.log(e)
+        if config.config.SSL:
+            ssl_context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
+            ssl_context.check_hostname = False
+            ssl_context.load_cert_chain(config.config.SSL_CERT, config.config.SSL_KEY)
+            try:
+                ssl_thread = threading.Thread(target=start_ssl_server, args=(ssl_context,))
+                ssl.daemon=True
+                ssl_thread.start()
+            except KeyboardInterrupt:
+                sys.exit(0)
+            except OSError as sock_error:
+                if sock_error.errno == 98:
+                    libs.logging.error("Socket already in use. Exiting...\n")
+                    sys.exit(0)
+            except Exception as e:
+                libs.logging.error("A error has occured while creating server socket\n")
+                libs.logging.log(e)
 
 
 
-        
 server_main()
+
+

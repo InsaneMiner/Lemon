@@ -52,9 +52,20 @@ USER_MODULE_PATH = "lemon/user/libs/"
 
 
 
-
+NORMAL_SERVER = True
 
 
 DEBUG = True
 
 ASYNCIO_MAX_WORKERS = 1000
+
+
+
+
+SSL_CERT = "lemon/ssl/ssl.crt"
+
+SSL_KEY = "lemon/ssl/ssl.key"
+
+SSL = False
+
+SSL_PORT = 4433
