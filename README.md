@@ -1,4 +1,4 @@
-![screenshot](https://raw.githubusercontent.com/InsaneMiner/Lemon/main/images/Lemon(1).png)
+![screenshot](https://raw.githubusercontent.com/InsaneMiner/Lemon/main/docs/images/Lemon(1).png)
 # Lemon
 
 
@@ -35,12 +35,15 @@ Linux and Mac
 ```
 $ pip3 install -r requirements.txt
 ```
+## Documentation
+Documentation is located in docs/
+
+
 ## Screenshots and Images
-![screenshot](https://raw.githubusercontent.com/InsaneMiner/Lemon/main/images/screenshots/Screenshot%20from%202021-01-25%2015-26-35.png)
+![screenshot](https://raw.githubusercontent.com/InsaneMiner/Lemon/main/docs/images/screenshots/Screenshot%20from%202021-01-25%2015-26-35.png)
 
 ### What needs doing
  - Make multipart-form/data faster when uploading large files
  - error handling more reliable
  - needs a debug mode for easier debuging
- - sql interface for easy database usage
  - more security features

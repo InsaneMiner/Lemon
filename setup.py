@@ -32,135 +32,140 @@ class HiddenPrints:
         sys.stdout = self._original_stdout
 
 
-os.chdir("libs/")
+if "setup" in sys.argv:
+    pass
+    
+else:
+
+    os.chdir("libs/")
 
 
 
-i = 0
-dir_name = "."
-test = os.listdir(dir_name)
+    i = 0
+    dir_name = "."
+    test = os.listdir(dir_name)
 
 
 
-for item in test:
-    if item.endswith(".so"):
-        print(f"[{i}] Deleting{os.path.join(dir_name, item)}")
-        try:
-            os.remove(os.path.join(dir_name, item))
-        except:
-            print(f"[!] Failed to delete {os.path.join(dir_name, item)}")
-        i = i+1
-        
+    for item in test:
+        if item.endswith(".so"):
+            print(f"[{i}] Deleting{os.path.join(dir_name, item)}")
+            try:
+                os.remove(os.path.join(dir_name, item))
+            except:
+                print(f"[!] Failed to delete {os.path.join(dir_name, item)}")
+            i = i+1
+            
 
-for item in test:
-    if item.endswith(".dll"):
-        print(f"[{i}] Deleting {os.path.join(dir_name, item)}")
-        try:
-            os.remove(os.path.join(dir_name, item))
-        except:
-            print(f"[!] Failed to delete {os.path.join(dir_name, item)}")
-        i = i+1
+    for item in test:
+        if item.endswith(".dll"):
+            print(f"[{i}] Deleting {os.path.join(dir_name, item)}")
+            try:
+                os.remove(os.path.join(dir_name, item))
+            except:
+                print(f"[!] Failed to delete {os.path.join(dir_name, item)}")
+            i = i+1
 
-cython = "*.py"
+    cython = "*.py"
 
-print("Going to compile:")
+    print("Going to compile:")
 
-for item in test:
-    if item.endswith(".py"):
-        print(f"{os.path.join(dir_name, item)}")
+    for item in test:
+        if item.endswith(".py"):
+            print(f"{os.path.join(dir_name, item)}")
 
-print("../lemon/lemon.py")
+    print("../lemon/lemon.py")
 
-done = threading.Event()
-spinner = threading.Thread(target=spin,
-                            args=('Compiling! This may take a couple of minutes.', done))
-spinner.start()  
+    done = threading.Event()
+    spinner = threading.Thread(target=spin,
+                                args=('Compiling! This may take a couple of minutes.', done))
+    spinner.start()  
 
-with HiddenPrints():
-    setup(
-        ext_modules=cythonize(cython),
-        script_args = ['build_ext',"--inplace"],
-        
+    with HiddenPrints():
+        setup(
+            ext_modules=cythonize(cython),
+            script_args = ['build_ext',"--inplace"],
+            
+        )
+
+
+    test = os.listdir(dir_name)
+
+
+    for item in test:
+        if item.endswith(".c"):
+            print(f"[{i}] Deleting {os.path.join(dir_name, item)}")
+            try:
+                os.remove(os.path.join(dir_name, item))
+            except:
+                print(f"[!] Failed to delete {os.path.join(dir_name, item)}")
+            i = i+1
+
+
+
+
+
+
+    try:
+        shutil.rmtree("build")
+    except OSError as e:
+        print("[!] Failed to delete build directory")
+    try:
+        shutil.rmtree("__pycache__")
+    except OSError as e:
+        print("[!] Failed to delete __pycache__ directory")
+
+    os.chdir("../lemon/")
+
+
+
+    i = 0
+    dir_name = "."
+    test = os.listdir(dir_name)
+    for item in test:
+        if item.endswith(".so"):
+            print(f"[{i}] Deleting {os.path.join(dir_name, item)}")
+            try:
+                os.remove(os.path.join(dir_name, item))
+            except:
+                print(f"[!] Failed to delete {os.path.join(dir_name, item)}")
+            i = i+1
+    for item in test:
+        if item.endswith(".dll"):
+            print(f"[{i}] Deleting {os.path.join(dir_name, item)}")
+            try:
+                os.remove(os.path.join(dir_name, item))
+            except:
+                print(f"[!] Failed to delete {os.path.join(dir_name, item)}")
+            i = i+1
+
+
+    with HiddenPrints():
+        setup(
+            ext_modules=cythonize("lemon.py"),
+            script_args = ['build_ext',"--inplace"],
+            
     )
+    done.set() 
+    spinner.join()  
+
+    test = os.listdir(dir_name)
+
+    for item in test:
+        if item.endswith(".c"):
+            print(f"[{i}] Deleting{os.path.join(dir_name, item)}")
+            try:
+                os.remove(os.path.join(dir_name, item))
+            except:
+                print(f"[!] Failed to delete {os.path.join(dir_name, item)}")
+            i = i+1
 
 
-test = os.listdir(dir_name)
-
-
-for item in test:
-    if item.endswith(".c"):
-        print(f"[{i}] Deleting {os.path.join(dir_name, item)}")
-        try:
-            os.remove(os.path.join(dir_name, item))
-        except:
-            print(f"[!] Failed to delete {os.path.join(dir_name, item)}")
-        i = i+1
-
-
-
-
-
-
-try:
-    shutil.rmtree("build")
-except OSError as e:
-    print("[!] Failed to delete build directory")
-try:
-    shutil.rmtree("__pycache__")
-except OSError as e:
-    print("[!] Failed to delete __pycache__ directory")
-
-os.chdir("../lemon/")
-
-
-
-i = 0
-dir_name = "."
-test = os.listdir(dir_name)
-for item in test:
-    if item.endswith(".so"):
-        print(f"[{i}] Deleting {os.path.join(dir_name, item)}")
-        try:
-            os.remove(os.path.join(dir_name, item))
-        except:
-            print(f"[!] Failed to delete {os.path.join(dir_name, item)}")
-        i = i+1
-for item in test:
-    if item.endswith(".dll"):
-        print(f"[{i}] Deleting {os.path.join(dir_name, item)}")
-        try:
-            os.remove(os.path.join(dir_name, item))
-        except:
-            print(f"[!] Failed to delete {os.path.join(dir_name, item)}")
-        i = i+1
-
-
-with HiddenPrints():
-    setup(
-        ext_modules=cythonize("lemon.py"),
-        script_args = ['build_ext',"--inplace"],
-        
-)
-done.set() 
-spinner.join()  
-
-test = os.listdir(dir_name)
-
-for item in test:
-    if item.endswith(".c"):
-        print(f"[{i}] Deleting{os.path.join(dir_name, item)}")
-        try:
-            os.remove(os.path.join(dir_name, item))
-        except:
-            print(f"[!] Failed to delete {os.path.join(dir_name, item)}")
-        i = i+1
-
-
-try:
-    shutil.rmtree("build")
-except OSError as e:
-    print("[!] Failed to delete build directory")
-try:
-    shutil.rmtree("__pycache__")
-except OSError as e:
-    print("[!] Failed to delete __pycache__ directory")
+    try:
+        shutil.rmtree("build")
+    except OSError as e:
+        print("[!] Failed to delete build directory")
+    try:
+        shutil.rmtree("__pycache__")
+    except OSError as e:
+        print("[!] Failed to delete __pycache__ directory")
