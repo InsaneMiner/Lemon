@@ -1,0 +1,1 @@
+All you need is python3 installed and all the packages in the reqirements.txt file and setuptools

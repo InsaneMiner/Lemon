@@ -9,8 +9,8 @@ How to get session data:
 var = object.session["item_name"]
 
 How to reset session:
-import libs.lemon
-libs.lemon.ResetSession(object)
+import lemon.libs.lemon
+lemon.libs.lemon.ResetSession(object)
 
 How to get cookies:
 var = object.cookies["item_name"]
@@ -28,15 +28,15 @@ How to get current url:
 var = object.url
 
 How to render pages in render folder:
-import libs.lemon
-return libs.lemon.Render(object,"file.file")
+import lemon.libs.lemon
+return lemon.libs.lemon.Render(object,"file.file")
 If you want to add variables to html files then add {{variable}}
 then return:
-return libs.lemon.Render(object,"file.file",{"variable":"hello"})
+return lemon.libs.lemon.Render(object,"file.file",{"variable":"hello"})
 
 How to display custom text from python:
-import libs.lemon
-return libs.lemon.HttpOutput(object,"<html><head></head><body><h1>Hello<h1></body></html>","text/html","None")
+import lemon.libs.lemon
+return lemon.libs.lemon.HttpOutput(object,"<html><head></head><body><h1>Hello<h1></body></html>","text/html","None")
 
 How to change port number:
 change the PORT variable in the config/config.py file.
@@ -54,8 +54,8 @@ How to change the length of the token that can be generate:
 Change the token_length variable in the config/config.py file, to a valid integer.
 
 How to redirect to another page:
-import libs.lemon
-return libs.lemon.redirect(object,"/url")
+import lemon.libs.lemon
+return lemon.libs.lemon.redirect(object,"/url")
 
 WARNINGS:
 1. Please do not change the HOST variable in the config/config.py file unless you know what it does.

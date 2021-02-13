@@ -1,0 +1,18 @@
+To build the lemon library you need to run
+
+First run:
+On linux and mac:
+$ python3 setup.py dev_build
+
+On windows
+$ python setup.py dev_build
+
+All that command does is zips a directory located at lemon/default. this will zip the file correctly, so do not just zip the file your self.
+
+Now run:
+
+On mac and linux:
+$ python3 setup.py bdist_wheel
+
+On windows:
+$ python setup.py bdist_wheel

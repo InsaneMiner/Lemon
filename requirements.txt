@@ -1,5 +1,6 @@
 urllib3
-cython
 regex
 asyncio
 watchdog
+shutil
+zipfile
