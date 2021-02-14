@@ -8,7 +8,7 @@ def zipdir(path, ziph):
             ziph.write(os.path.join(root, file) , os.path.relpath(os.path.join(root, file), path) )
   
 
-name, version = ("lemon-framework", "1.2.3")
+name, version = ("lemon-framework", "1.2.4")
 
 
 if len(sys.argv) < 2 and sys.argv[1] == "dev_build":
@@ -33,5 +33,5 @@ else:
 		packages=["lemon","lemon.libs"],
 		package_data={'': ['default.zip']},
 		include_package_data=True,
-		install_requires = ["urllib2","regex","asyncio","watchdog"],
+		install_requires = ["urllib3","regex","asyncio","watchdog"],
 	)
