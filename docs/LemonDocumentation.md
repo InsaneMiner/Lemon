@@ -1,16 +1,10 @@
 # Lemon Documentation
-
+Version: 1.2.1
   
 
 ### What is Lemon
 
-Lemon is a web framework written in python. Lemon is easy to start with, even if you are a begginer with python, you can create a website.
-
-### Why use Lemon
-
-Lemon is simple to use but you can also make great web applications with it.
-
-Its easier than django, but not written like flask.
+Lemon is a web server and web framework written in python. Lemon is easy to start with, even if you are a beginner with python, you can create a website.
 
 ### Why Lemon was created
 
@@ -100,11 +94,11 @@ Now Lemon is installed from source
 #### Installing with pip
 With windows
 ```
-pip install lemon
+pip install lemon-framework
 ```
 On mac and linux
 ```
-pip3 install lemon
+pip3 install lemon-framework
 ```
 ### Setting up a new project
 

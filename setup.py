@@ -8,7 +8,7 @@ def zipdir(path, ziph):
             ziph.write(os.path.join(root, file) , os.path.relpath(os.path.join(root, file), path) )
   
 
-
+name, version = ("lemon-framework", "1.2.1")
 
 
 if len(sys.argv) < 2:
@@ -18,8 +18,8 @@ if len(sys.argv) < 2:
 	from setuptools import setup, find_packages
 
 	setup(
-		name="lemon",
-		version='1.2.1',
+		name=name,
+		version=version,
 		author='Joel Schofield',
 		author_email='none@none.none',
 		url='https://github.com/InsaneMiner/Lemon',
@@ -29,6 +29,7 @@ if len(sys.argv) < 2:
 		packages=["lemon","lemon.libs"],
 		package_data={'': ['default.zip']},
 		include_package_data=True,
+		install_requires = ["urllib2","regex","asyncio","watchdog","shutil","zipfile"],
 		
 		
 	)
@@ -43,8 +44,8 @@ else:
 	from setuptools import setup, find_packages
 
 	setup(
-		name="lemon",
-		version='1.2.1',
+		name=name,
+		version=version,
 		author='Joel Schofield',
 		author_email='none@none.none',
 		url='https://github.com/InsaneMiner/Lemon',
@@ -54,6 +55,5 @@ else:
 		packages=["lemon","lemon.libs"],
 		package_data={'': ['default.zip']},
 		include_package_data=True,
-		
-		
+		install_requires = ["urllib2","regex","asyncio","watchdog","shutil","zipfile"],
 	)
