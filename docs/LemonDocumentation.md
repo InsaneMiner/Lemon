@@ -1,6 +1,5 @@
 # Lemon Documentation
-Version: 1.2.1
-  
+
 
 ### What is Lemon
 
