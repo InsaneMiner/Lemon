@@ -3,4 +3,3 @@ regex
 asyncio
 watchdog
 shutil
-zipfile
