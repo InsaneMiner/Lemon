@@ -244,6 +244,8 @@ async def handle_client(reader,writer):
             log_info(page_content[1],time_took,address,request_full_url,dateandtime)
         except Exception as e:
             print(e)
+            
+        # This deletes all files that where pasted through a form in the current request
         keys = list(page_content[1].FILES.keys())
         for x in range(len(keys)):
             try:

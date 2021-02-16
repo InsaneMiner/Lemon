@@ -1,7 +1,7 @@
 ![screenshot](https://raw.githubusercontent.com/InsaneMiner/Lemon/main/docs/images/Lemon(1).png)
 
 # Lemon
-Version: 1.3.0
+Version: 1.3.1
   
   
   

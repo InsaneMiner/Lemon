@@ -102,6 +102,14 @@ def get_page(object):
 
 
 
+def delete_all_temp_files(boject):
+    keys = list(object.FILES.keys())
+    for x in range(len(keys)):
+        try:
+            os.remove("{}/{}").format(config.config.TEMP,object.FILES[keys[x]]['temp'])
+        except:
+            pass
+
 
 
 
@@ -132,7 +140,7 @@ def Handle(env):
     request_body = env['wsgi.input'].read(request_body_size)
     try:
         if env["REQUEST_METHOD"].lower() == "post" and "multipart/form-data;" in env["CONTENT_TYPE"]:
-            multipart_files = mf.multipart_formdata( b"Content-Type: " + env["CONTENT_TYPE"].encode("utf-8") + b"\r\nMIME-Version: 1.0\r\n\r\n" + request_body , ".", compile=False)
+            multipart_files = mf.multipart_formdata( b"Content-Type: " + env["CONTENT_TYPE"].encode("utf-8") + b"\r\nMIME-Version: 1.0\r\n\r\n" + request_body , config.config.TEMP, compile=False)
             data = request_body.decode("utf-8",errors="ignore").split("--"+env["CONTENT_TYPE"].replace("multipart/form-data; boundary=","",1))[:-1]
             for x in range(len(data)):
                 if data[x] == "":
@@ -214,14 +222,11 @@ def application(env, start_response):
     response_object = get_page(request)
 
 
-
-
-
+    # get_page returns a list of two items. The first item is the stuff that wants to be sent to the client.
+    # The second item is the request object.
     object = response_object[1]
-
     headers = []
-
-
+    # Constructs all the headers into a list
     for x in object.headers.keys():
         headers.append(   (x, object.headers[x] )   )
 
@@ -232,6 +237,9 @@ def application(env, start_response):
 
     start_response(f"{object.status} {http_status.HTTP_STATUS_CODES[int(object.status)]}", headers)
 
+
+    # This will run the function delete_all_temp_files in a thread. This function will delete all the files upload in the current request
+    threading.Thread(target=delete_all_temp_files,args=(object)).start()
     # This must be a list. If it is a string it will send each letter one by one.
     # In other words it will iterate throught the string, that is why is must be a list.
-    return [response_object[0]] # python3
+    return [response_object[0]] 
