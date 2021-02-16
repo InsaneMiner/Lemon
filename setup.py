@@ -28,7 +28,7 @@ else:
 		author_email='none@none.none',
 		url='https://github.com/InsaneMiner/Lemon',
 		license='LICENSE',
-		description='Web framework and web server written in python',
+		description='Web framework written in python',
 		long_description=open('README.md').read(),
 		packages=["lemon","lemon.libs"],
 		package_data={'': ['default.zip']},
