@@ -76,7 +76,7 @@ def handle_request(object):
         sessions_[id_] = {}
     object.session = sessions_[id_]
     
-    data =  app.urls.page(object)
+    data =  lemon.libs.route(object)
     threading.Thread(target=reset_session,args=(data,id_)).start()
     return data
 
