@@ -35,7 +35,7 @@ Lemon is not for production.
 
 ### How to use
 
-Please read documentation to get started. The lemon docs are at: [docs/LemonDocumentation.md](docs/LemonDocumentation.md)
+Please read documentation to get started. The lemon docs are at: [docs/LemonDocumentation.md](https://github.com/InsaneMiner/Lemon/docs/LemonDocumentation.md)
 
 ## Documentation
 
@@ -43,7 +43,7 @@ Documentation is located in docs/
 
 # Contribute
 
-Read the [CONTRIBUTE.md](CONTRIBUTE.md) file
+Read the [CONTRIBUTE.md](https://github.com/InsaneMiner/Lemon/CONTRIBUTE.md) file
 
   
 
