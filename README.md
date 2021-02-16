@@ -21,7 +21,7 @@ Watch for more info: https://www.youtube.com/watch?v=PYr8js5QY1M
 
 ### Info
 
-This project is a web server/web framework written in python. You can write a web app with python in this new web framework.
+This project is a web framework written in python. You can write a web app with python in this new web framework.
 
 <br>
 
