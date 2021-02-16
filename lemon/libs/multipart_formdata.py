@@ -6,7 +6,7 @@ def random_temp(length = 10):
     letters = string.ascii_lowercase
     result_str = ''.join(random.choice(letters) for i in range(length))
     return result_str
-def multipart_formdata(data,temp_folder):
+def multipart_formdata(data,temp_folder,compile=True):
 
 
     try:
@@ -17,18 +17,22 @@ def multipart_formdata(data,temp_folder):
         except:
             pass
         return "Must be Bytes"
-    new_data = b""
-    orign = data.decode("utf-8","ignore")
-    headers = orign[:orign.find("\n\n")].split("\n")
+    if compile == True:
+        new_data = b""
+        orign = data.decode("utf-8","ignore")
+        headers = orign[:orign.find("\n\n")].split("\n")
 
-    new_data += "".join(s for s in headers if "Content-Type: multipart/form-data;" in s).encode("utf-8")+b"\n\n"
+        new_data += "".join(s for s in headers if "Content-Type: multipart/form-data;" in s).encode("utf-8")+b"\n\n"
 
-    if new_data.decode("utf-8").endswith("\n\n\n\n"):
-        new_data = new_data[:-2]
+        if new_data.decode("utf-8").endswith("\n\n\n\n"):
+            new_data = new_data[:-2]
 
 
-    new_data += data[orign.find("\r\n\r\n")+4:]
+        new_data += data[orign.find("\r\n\r\n")+4:]
+    else:
+        new_data = data
 
+    print(new_data.decode("utf-8"))
     msg = email.parser.BytesParser().parsebytes(new_data)
     files = {}
     for part in msg.get_payload():

@@ -216,12 +216,11 @@ async def handle_client(reader,writer):
                         object.status = "200"
                         object.FILES = request_object.FILES
                         object.temp = request_object.temp
-                        object.headers = request_object.headers
+                    
                         # set needed headers for response
-                        object.response_headers["Date"] = str(lemon.libs.Date.httpdate())
-                        object.response_headers["Server"] = str(config.config.SERVER)
-                        object.response_headers["Last-Modified"] = str(lemon.libs.Date.httpdate())
-                        object.response_headers["Connection"] = "Closed"
+                        object.headers["Date"] = str(lemon.libs.Date.httpdate())
+                        object.headers["Server"] = str(config.config.SERVER)
+                        object.headers["Connection"] = "Closed"
                         page_content = handle_request(object)
                         DATA = lemon.libs.create_http.create(page_content)
                         writer.write(DATA)

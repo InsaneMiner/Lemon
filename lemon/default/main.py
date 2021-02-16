@@ -72,6 +72,7 @@ if __name__ == '__main__':
         else:
             lemon.libs.logging.notice("Starting Watchdog\n")
             lemon.libs.logging.notice("Starting Server\n")
+            lemon.libs.logging.error("This is only a development server, please use a proper server for production\n")
             start_server()
             current_url()
             watch = OnMyWatch() 

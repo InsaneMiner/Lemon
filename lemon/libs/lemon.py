@@ -149,11 +149,11 @@ def HttpOutput(object,output,_type,size):
     if cookies1 == "":
         pass
     else:
-        object.response_headers["Set-Cookie"] = cookies1
+        object.headers["Set-Cookie"] = cookies1
         cookies1 = cookies1.rstrip("\n")
     #set some headers
-    object.response_headers["Content-Type"] = str(_type)
-    object.response_headers["Content-Length"] = str(size)
+    object.headers["Content-Type"] = str(_type)
+    object.headers["Content-Length"] = str(size)
     return [output,object]
 
 
@@ -186,12 +186,12 @@ def HttpOutputVar(object,output,_type,size,var={}):
     if cookies1 == "":
         pass
     else:
-        object.response_headers["Set-Cookie"] = cookies1
+        object.headers["Set-Cookie"] = cookies1
         cookies1 = cookies1.rstrip("\n")
     output = lemon.libs.html_to_htpy.convert_to(output,var).encode("utf-8")
     #set some headers
-    object.response_headers["Content-Type"] = str(_type)
-    object.response_headers["Content-Length"] = str(size)
+    object.headers["Content-Type"] = str(_type)
+    object.headers["Content-Length"] = str(size)
 
 
     
@@ -206,7 +206,7 @@ def HttpOutputVar(object,output,_type,size,var={}):
 
 
 def redirect(object,url):
-    object.response_headers["Location"] = url
+    object.headers["Location"] = url
     object.status = "302"
     print("\nredirecting:",object.url,"-->",url)
     return HttpOutput(object,"","text/html","None")

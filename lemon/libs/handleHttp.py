@@ -19,12 +19,12 @@ def current_cookies(Cookies):
     return cookie
 class RequestObject:
     def __init__(self):
-        page=""
-        cookies = {}
-        headers = []
-        url = ""
-        _POST = {}
-        _GET = {}
+        self.page=""
+        self.cookies = {}
+        self.headers = []
+        self.url = ""
+        self._POST = {}
+        self._GET = {}
         request_type = ""
 def get_headers(request):
     headers = request.decode("utf-8","ignore").split("\r\n\r\n",1)[0]
@@ -119,9 +119,9 @@ def http(headers):
     object.cookies = cookies
     object.url = url
     object.page = page
-    object.headers = headers
     object.request_type = request_type
     object.temp = Temp
     object.FILES = FILES
     object.HTTP_VERSION = HTTP_VERSION[0][1]
+    object.headers = headers
     return object

@@ -113,8 +113,8 @@ def create(page_content):
     http_headers = ""
 
     http_headers += f"HTTP/1.1 {object.status} {HTTP_STATUS_CODES[int(object.status)]}\r\n" 
-    for x in object.response_headers.keys():
-        http_headers += f"{x}: {object.response_headers[x]}\r\n"
+    for x in object.headers.keys():
+        http_headers += f"{x}: {object.headers[x]}\r\n"
     http_headers += "\r\n"
     return http_headers.encode("utf-8",errors="ignore")+page_content_1
     #return f'HTTP/1.1 {page_content[4].status} OK\r\nDate: {str(lemon.libs.Date.httpdate())}\r\nServer: {str(config.config.SERVER)}\r\nLast-Modified: {str(lemon.libs.Date.httpdate())}\r\nContent-Length: {str(page_content[3])}\r\nContent-Type: {str(page_content[1])}{str(cookie_string)}\r\nConnection: Closed\r\n\r\n'.encode("utf-8",errors="ignore")+page_content_1
