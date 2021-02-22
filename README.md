@@ -36,6 +36,16 @@ Lemon is not for production.
 ### How to use
 
 Please read documentation to get started. The lemon docs are at: [docs/LemonDocumentation.md](https://github.com/InsaneMiner/Lemon/docs/LemonDocumentation.md)
+### How to install
+Windows
+```
+pip install lemon-framework
+```
+Linux and Mac
+```
+pip3 install lemon-framework
+```
+
 
 ## Documentation
 
