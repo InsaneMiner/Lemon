@@ -14,6 +14,7 @@ import lemon.libs.HttpObject
 import lemon.libs.handleHttp
 import lemon.libs.colors
 import lemon.libs.logging
+import lemon.libs.route
 import base64, asyncio, re, time, string, random, sys, threading, os, concurrent.futures
 import cProfile, pstats
 
@@ -76,7 +77,7 @@ def handle_request(object):
         sessions_[id_] = {}
     object.session = sessions_[id_]
     
-    data =  lemon.libs.route(object)
+    data =  lemon.libs.route.page(object)
     threading.Thread(target=reset_session,args=(data,id_)).start()
     return data
 

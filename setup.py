@@ -8,7 +8,7 @@ def zipdir(path, ziph):
             ziph.write(os.path.join(root, file) , os.path.relpath(os.path.join(root, file), path) )
   
 
-name, version = ("lemon-framework", "1.3.2")
+name, version = ("lemon-framework", "1.3.3")
 
 
 if len(sys.argv) <= 2 and sys.argv[1] == "dev_build":
