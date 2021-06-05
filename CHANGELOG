@@ -1,0 +1,13 @@
+- 1.3.4
+DEV SERVER:
+dev server did not work with threading because it was exiting while also trying to run. 
+I fixed this by making sure that we wait for the threads before we exit.
+I made a list of running threads(the list of running threads is only the ssl server and normal one) 
+then looped through them and used join to make sure that we waited for them.
+URL ROUTING:
+there was code in default/app/urls.py that was needed. The library handles routing, 
+but the old code used to not so the code was for routing. So what is left is just a dict for urls.
+DOCUMENTATION:
+I added some more info documentation.
+TEMPLATES:
+templates now use jinja2 instead of lemons stupid template thing.

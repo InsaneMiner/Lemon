@@ -9,7 +9,7 @@ Lemon is a web server and web framework written in python. Lemon is easy to star
 
 One day I was making a simple search engine, I just had finished the book Google it. I was inspired after reading the book, so I wanted to create a search engine. The only programming language a new enough of to write a search engine was python. I wanted it to work as a website, like Google. I thought of using flask because it was simple, but I did not really like how you had I had to write my application, Then I thought maybe django would be good, its got a good way of writing web application, I thought, but when I start writing the website, I found it was harder than it had to be. So I thought, how hard could it really be to write a web framework from scratch by my self, let me tell you it was not as easy as I thought, but in the end I did it. It took me 1-2 months. So that is why I created Lemon.
 
-### What you need to Know to get start
+### What you need to know to get start
 
 You will need to know basic HTML and CSS, for the front end. The backend is all written in python.
 
@@ -23,7 +23,7 @@ You will need to know basic HTML and CSS, for the front end. The backend is all 
 
 - Dispalying html file
 
-- Display html file with variables
+- Display html file with variables aka templating
 
 - Add more paths/urls.
 
@@ -42,9 +42,16 @@ You will need to know basic HTML and CSS, for the front end. The backend is all 
 - Url Variables - unfixed urls
 
   
-
-### Setting up Lemon
-#### From source 
+#### Installing with pip
+With windows
+```
+pip install lemon-framework
+```
+On mac and linux
+```
+pip3 install lemon-framework
+```
+### Installing from source
 download the source code with.
 
 ```
@@ -61,7 +68,7 @@ cd Lemon
 
 ```
 ##### Now you to install all required packages
-for mac and linux
+for Mac and Linux
 ```
 pip3 install -r requirements
 ```
@@ -74,7 +81,7 @@ pip install -r requirements.txt
 ```
 ##### Now you need to install lemon
 
-for mac and linux
+for Mac and Linux
 ```
 
 python3 setup.py install
@@ -90,15 +97,6 @@ python setup.py install
 ```
 
 Now Lemon is installed from source
-#### Installing with pip
-With windows
-```
-pip install lemon-framework
-```
-On mac and linux
-```
-pip3 install lemon-framework
-```
 ### Setting up a new project
 
 Once you have lemon installed you need to create your first project
@@ -112,6 +110,42 @@ Mac and Linux
 python3 -m lemon.lemonCreate project-name
 ```
 Now you should have a new directory with the name of your project, that is your project.
+### Running the project
+Running your new app is not that hard.<br>
+#### Running with development server (For development).
+Lemon has a built-in development server for testing and development.
+To run this first enter the directory of your project
+```
+cd project-name
+```
+then run these commands
+##### On windows
+```
+python main.py
+```
+#### On Mac and Linux
+```
+python3 main.py
+```
+#### Running the wsgi server(for production/public with small web apps)
+This is needed when you want your app to go public because the built-in development server is slower and less secure (Please see development server issues section for more info). You could set it up with a web server like `apache` or `nginx`(I will talk a little more on this later), but I'm going to show you how to do it with `uWSGI`(more on uWSGI  [here](https://uwsgi-docs.readthedocs.io/en/latest/WSGIquickstart.html)). So first we need to install uWSGI.Please go [here](https://uwsgi-docs.readthedocs.io/en/latest/Install.html) for info on installing it. Now enter the directory that the project is located in
+```
+cd project-name
+```
+then run 
+```
+uwsgi --http :8000 --wsgi-file wsgi.py
+```
+port 8000 can be anything you want.
+#### Running with a real server (For production/public for big apps)(recommended for serious apps)
+Im not going to teach you, but I'm going to give you some links to info that could help.
+ - [https://modwsgi.readthedocs.io/en/develop/](https://modwsgi.readthedocs.io/en/develop/)
+ - [https://uwsgi-docs.readthedocs.io/en/latest/WSGIquickstart.html](https://uwsgi-docs.readthedocs.io/en/latest/WSGIquickstart.html)
+ - [https://www.digitalocean.com/community/tutorials/how-to-set-up-uwsgi-and-nginx-to-serve-python-apps-on-ubuntu-14-04](https://www.digitalocean.com/community/tutorials/how-to-set-up-uwsgi-and-nginx-to-serve-python-apps-on-ubuntu-14-04)
+ - [https://uwsgi-docs.readthedocs.io/en/latest/Nginx.html](https://uwsgi-docs.readthedocs.io/en/latest/Nginx.html)
+ - [https://medium.com/analytics-vidhya/what-is-wsgi-web-server-gateway-interface-ed2d290449e](https://medium.com/analytics-vidhya/what-is-wsgi-web-server-gateway-interface-ed2d290449e)
+ - [https://easycodeshare.com/wsgi-app-in-python-under-apache-mod_wsgi/](https://easycodeshare.com/wsgi-app-in-python-under-apache-mod_wsgi/)
+
 ### Displaying html onto a page
 
 To display HTML onto a page with python we will need to add some code to a file. So know open the file in the **app** directory.
@@ -204,9 +238,12 @@ Then restart the server and then open it up in the browser.
 
 All files that you are going to use render with are going to be in the **render** directory.
 
-### Display html file with variables
+### Display html file with variables aka templating
 
-If you want to display a html file, but you want to use some variables in the code, for example if you want to display the users name on the page but you have a html page for there profile, then you can.
+Lemon uses jinja2 as a templating system.
+here is some info on jinja2 syntax.
+ - [https://docs.plextrac.com/plextrac-documentation/jinja-templating/jinja-basic-and-foundations/jinja-syntax](https://docs.plextrac.com/plextrac-documentation/jinja-templating/jinja-basic-and-foundations/jinja-syntax)
+ - [https://docs.exponea.com/docs/jinja-syntax](https://docs.exponea.com/docs/jinja-syntax)
 
 First we need to create a file called **myfile.html** in the **render** directory.
 
@@ -214,7 +251,7 @@ The code in myfile.html should look like
 
 ```html
 
-<h1>{{username}}</h1>
+<h1>{{ username }}</h1>
 
 ```
 
@@ -222,7 +259,7 @@ Then in the **web.py** you need to change the line
 
 ```python
 
-return lemon.libs.lemon.Render(object,"default.html")
+return lemon.libs.lemon.render_template(object,"default.html")
 
 ```
 
@@ -230,13 +267,13 @@ To
 
 ```python
 
-return lemon.libs.lemon.Render(object,"myfile.html",{"username":"Username"})
+return lemon.libs.lemon.render_template(object,"myfile.html",username="Username")
 
 ```
 
-Now restart the server and open it up in the browser.
+Now open it up in the browser.
 
-it should display Username in the browser. So that is how you can use variables in your html files. This also can work in css and javascript files.
+it should display **Username** in the browser. So that is how you can use variables in your html files. This also can work in css and javascript files.
 
 ### Add more paths/urls.
 
@@ -305,8 +342,7 @@ Now your **mydog** function should look like this
 ```python
 
 def  mydog(object):
-
-return lemon.libs.lemon.Render(object,"mydog.html")
+    return lemon.libs.lemon.render_template(object,"mydog.html")
 
 ```
 
@@ -328,7 +364,7 @@ So to do this you should change
 
 ```python
 
-return lemon.libs.lemon.Render(object,"default.html")
+return lemon.libs.lemon.render_template(object,"default.html")
 
 ```
 

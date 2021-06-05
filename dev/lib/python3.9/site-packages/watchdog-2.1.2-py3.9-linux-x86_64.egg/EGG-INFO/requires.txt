@@ -1,0 +1,4 @@
+
+[watchmedo]
+PyYAML>=3.10
+argh>=0.24.1
