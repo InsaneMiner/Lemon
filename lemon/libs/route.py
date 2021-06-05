@@ -1,5 +1,4 @@
 import app.web
-import lemon.libs.errors
 import config.config
 import lemon.libs.lemon
 import lemon.libs.colors
@@ -14,7 +13,7 @@ def page(object):
             object.url_data = correct_url[1]
             data = getattr(app.web, app.urls.urls[correct_url[0]])(object)
         except Exception as e:
-            data = lemon.libs.errors.error(object,500)   
+            data = lemon.libs.lemon.error(object,500)   
             print(e)
         return data
     else:
@@ -22,4 +21,4 @@ def page(object):
             data = lemon.libs.lemon.render_static(object,object.url[1:])
             return data
         except:
-            return lemon.libs.errors.error(object,404)
+            return lemon.libs.lemon.error(object,404)

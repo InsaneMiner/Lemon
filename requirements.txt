@@ -2,3 +2,4 @@ urllib3
 regex
 asyncio
 watchdog
+jinja2

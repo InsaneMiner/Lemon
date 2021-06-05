@@ -10,4 +10,11 @@ but the old code used to not so the code was for routing. So what is left is jus
 DOCUMENTATION:
 I added some more info documentation.
 TEMPLATES:
-templates now use jinja2 instead of lemons stupid template thing.
+templates now use jinja2 instead of lemons stupid template system.
+USER_PROJECT/CONFIG/CONFIG:
+added some configurations for gunicorn.
+USER_PROJECT/MAIN.PY:
+Now the file in the users project calls a function in the library 
+so that the users project is easier to keep up to date.
+If most of the processing is done in the library 
+it will be easier to update there app to the latest version of Lemon

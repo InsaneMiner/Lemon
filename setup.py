@@ -15,7 +15,6 @@ if len(sys.argv) >= 2 and sys.argv[1] == "dev_build":
 		zipf = zipfile.ZipFile('lemon/default.zip', 'w', zipfile.ZIP_DEFLATED)
 		zipdir('lemon/default', zipf)
 		zipf.close()
-
 else:
 	import re
 
@@ -33,5 +32,5 @@ else:
 		packages=["lemon","lemon.libs"],
 		package_data={'': ['default.zip']},
 		include_package_data=True,
-		install_requires = ["urllib3","regex","asyncio","watchdog"],
+		install_requires = ["urllib3","regex","asyncio","watchdog","jinja2"],
 	)
