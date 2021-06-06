@@ -1,4 +1,0 @@
-asyncio
-regex
-urllib3
-watchdog

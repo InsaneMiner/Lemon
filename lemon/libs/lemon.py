@@ -15,6 +15,15 @@ from jinja2 import Template
 
 extensions = lemon.libs.extensions.extensions(config.config.EXTENSIONS_CONFIG)
 
+
+
+
+def error(object,error_code):
+    object.status=str(error_code)
+    return render_template_ep(object,config.config.errorHtmlFile,{"error_code":str(error_code),"error_content":lemon.libs.errors.HTTP_STATUS_MESSAGES[error_code]})
+
+
+
 def ext(file):
     filename, file_extension = os.path.splitext(file)
     return file_extension.lower()
@@ -35,15 +44,15 @@ def render_static(object,file):
         return HttpOutput(object,content,mime_type,file_size)
        
     except PermissionError:
-        return lemon.libs.errors.error(object,403)
+        return error(object,403)
     except (IsADirectoryError,FileNotFoundError):
-        return lemon.libs.errors.error(object,404)
+        return error(object,404)
     except OSError as exc:
         if exc.errno == 36:
-            return lemon.libs.errors.error(object,404)
+            return error(object,404)
     except Exception as e:
         print(e)
-        return lemon.libs.errors.error(object,500)
+        return error(object,500)
 
 
 
@@ -67,18 +76,46 @@ def render_template(*argv, **kwargs):
         try:
             template = Template(content.decode("utf-8"))
         except:
-            return lemon.libs.errors.error(object,500)
+            return error(object,500)
         
         content = template.render(*argv[2:], **kwargs)
         file_size = os.path.getsize(f"{config.config.RENDER}/{file}")
         return HttpOutput(object,content,mime_type,file_size)
     except PermissionError:
-        return lemon.libs.errors.error(object,403)
+        return error(object,403)
     except FileNotFoundError:
-        return lemon.libs.errors.error(object,404)
+        return error(object,404)
     except Exception as e:
         print(e)
-        return lemon.libs.errors.error(object,500)
+        return error(object,500)
+
+def render_template_ep(*argv, **kwargs): # ep means exact path
+    file = argv[1]
+    object = argv[0]
+    try:
+        with open(f"{file}","rb") as fo:
+                content = fo.read()
+        if ext(file) in lemon.libs.file_extensions.extensions:
+            mime_type = lemon.libs.file_extensions.extensions[ext(file)]
+        else:
+            mime_type = config.config.DEFAULT_MIME_TYPE
+        try:
+            template = Template(content.decode("utf-8"))
+        except:
+            return error(object,500)
+        
+        content = template.render(*argv[2:], **kwargs)
+        file_size = os.path.getsize(f"{file}")
+        return HttpOutput(object,content,mime_type,file_size)
+    except PermissionError:
+        return error(object,403)
+    except FileNotFoundError:
+        return error(object,404)
+    except Exception as e:
+        print(e)
+        return error(object,500)
+
+
 '''
 def RenderPath(object,file,var={}):
     try:
@@ -102,13 +139,13 @@ def RenderPath(object,file,var={}):
         else:
             return HttpOutput(object,content,config.config.DEFAULT_MIME_TYPE,file_size)
     except PermissionError:
-        return lemon.libs.errors.error(object,403)
+        return error(object,403)
     except FileNotFoundError:
-        return lemon.libs.errors.error(object,404)
+        return error(object,404)
     except Exception as e:
         print(e)
-        return lemon.libs.errors.error(object,500)
-'''      
+        return error(object,500)
+'''    
 def HttpOutput(object,output,_type,size):
     Cookies = object.new_cookies
     if size == "None":

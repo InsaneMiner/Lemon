@@ -1,1 +1,0 @@
-# All this files does is allows lemon to find where it currently is in your system

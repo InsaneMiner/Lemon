@@ -128,16 +128,17 @@ python main.py
 python3 main.py
 ```
 #### Running the wsgi server(for production/public with small web apps)
-This is needed when you want your app to go public because the built-in development server is slower and less secure (Please see development server issues section for more info). You could set it up with a web server like `apache` or `nginx`(I will talk a little more on this later), but I'm going to show you how to do it with `uWSGI`(more on uWSGI  [here](https://uwsgi-docs.readthedocs.io/en/latest/WSGIquickstart.html)). So first we need to install uWSGI.Please go [here](https://uwsgi-docs.readthedocs.io/en/latest/Install.html) for info on installing it. Now enter the directory that the project is located in
+This is needed when you want your app to go public because the built-in development server is slower and less secure (Please see development server issues section for more info). You could set it up with a web server like `apache` or `nginx`(I will talk a little more on this later), but I'm going to show you how to do it with `gunicorn`(more on gunicorn  [here](https://docs.gunicorn.org/en/stable/)). So first we need to install gunicorn.Please go [here](https://docs.gunicorn.org/en/stable/install.html) for info on installing it. Now enter the directory that the project is located in
 ```
 cd project-name
 ```
 then run 
 ```
-uwsgi --http :8000 --wsgi-file wsgi.py
+python3 -m gunicorn wsgi -c config/config.py
 ```
-port 8000 can be anything you want.
-#### Running with a real server (For production/public for big apps)(recommended for serious apps)
+There now your web app is running on the port you have configured it on.
+#### Running with a real server (For production/public for big apps)(recommended for serious/big apps)
+Gunicorn is really powerfull so you should not need this until your app is big or has lots of requests.
 Im not going to teach you, but I'm going to give you some links to info that could help.
  - [https://modwsgi.readthedocs.io/en/develop/](https://modwsgi.readthedocs.io/en/develop/)
  - [https://uwsgi-docs.readthedocs.io/en/latest/WSGIquickstart.html](https://uwsgi-docs.readthedocs.io/en/latest/WSGIquickstart.html)

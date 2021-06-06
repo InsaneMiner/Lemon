@@ -212,7 +212,6 @@ def Handle(env):
 
 
 def application(env, start_response):
-    print("request")
     
     request = Handle(env)
     
@@ -235,4 +234,7 @@ def application(env, start_response):
     threading.Thread(target=delete_all_temp_files, args=[object,1] ).start()
     # This must be a list. If it is a string it will send each letter one by one.
     # In other words it will iterate throught the string, that is why is must be a list.
-    return [response_object[0]] 
+    if config.config.RETURN_BYTES != True:
+        return [response_object[0]] 
+    else:
+        return [bytes(response_object[0],"utf-8")] 
