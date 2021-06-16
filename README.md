@@ -35,7 +35,7 @@ Lemon is not for production.
 
 ### How to use
 
-Please read documentation to get started. The lemon docs are at: [docs/LemonDocumentation.md](https://github.com/InsaneMiner/Lemon/docs/LemonDocumentation.md)
+Please read documentation to get started. The lemon docs are at: [docs/LemonDocumentation.md](https://github.com/InsaneMiner/Lemon/blob/main/docs/LemonDocumentation.md)
 ### How to install
 Windows
 ```
