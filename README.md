@@ -64,8 +64,12 @@ Read the [CONTRIBUTE.md](https://github.com/InsaneMiner/Lemon/CONTRIBUTE.md) fil
   
 
 ### What needs doing
+### Dev server
 
-- Make multipart-form/data faster when uploading large files
+
+- Make multipart-form/data faster when uploading large files. 
+
+### Core
 
 - error handling more reliable
 
