@@ -1,21 +1,8 @@
 ![screenshot](https://raw.githubusercontent.com/InsaneMiner/Lemon/main/docs/images/Lemon(1).png)
 
 # Lemon
-Version: 1.3.4
-  
-  
-  
-  
-  
-  
 
 Welcome to Lemon<br>
-
-This project is open source so do what ever you want with it.
-
-<br>
-
-Watch for more info: https://www.youtube.com/watch?v=PYr8js5QY1M
 
 <br>
 
